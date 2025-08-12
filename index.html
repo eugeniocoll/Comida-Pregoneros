@@ -5,288 +5,297 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Comida Pregoneros 2025</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
   html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9f7fc;
-    color: #4a148c;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+    color: #3b0d6e;
   }
   body {
-    background: url('assets/20250608_111348_206.png') no-repeat center top;
-    background-size: 150px auto;
-    background-attachment: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 30px 15px 60px 15px;
   }
   header {
-    padding: 30px 20px 10px 20px;
+    width: 100%;
+    max-width: 650px;
+    margin-bottom: 30px;
     text-align: center;
-    background: transparent;
-    position: relative;
   }
-  .titulo-bg {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.85);
-    padding: 10px 25px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(106, 13, 173, 0.25);
+  header img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 12px;
+    filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.1));
   }
   header h1 {
-    font-size: 2.8em;
+    font-weight: 600;
+    font-size: 2.8rem;
     margin: 0;
-    font-weight: 700;
-    color: #6a0dad;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.15);
+    color: #3b0d6e;
+    text-shadow: 1px 1px 6px rgba(255 255 255 / 0.8);
   }
 
   form {
-    max-width: 620px;
-    background: rgba(255, 255, 255, 0.95);
-    margin: 40px auto 60px auto;
-    padding: 30px 30px 40px 30px;
-    border-radius: 14px;
-    box-shadow: 0 8px 25px rgba(106, 13, 173, 0.2);
-    color: #5a2a72;
+    width: 100%;
+    max-width: 650px;
+    background: white;
+    border-radius: 16px;
+    padding: 30px 40px 40px 40px;
+    box-shadow: 0 12px 30px rgba(100, 55, 155, 0.25);
+    color: #3b0d6e;
   }
-  form label {
-    font-weight: 600;
+  label {
     display: block;
-    margin-top: 20px;
-    color: #4a148c;
-    text-shadow: 0 0 3px rgba(255 255 255 / 0.8);
+    font-weight: 600;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: 1.05rem;
   }
   input[type="text"], input[type="number"] {
     width: 100%;
-    padding: 10px 12px;
-    margin-top: 8px;
-    box-sizing: border-box;
-    border: 2px solid #b19cd9;
-    border-radius: 8px;
-    font-size: 1em;
-    background: #f8f5fc;
-    color: #4b1d75;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 2px solid #c5b3e8;
+    background-color: #f9f7ff;
+    color: #3b0d6e;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
   input[type="text"]:focus, input[type="number"]:focus {
-    border-color: #6a0dad;
+    border-color: #7a4ed0;
     outline: none;
-    box-shadow: 0 0 8px #6a0dadaa;
+    box-shadow: 0 0 8px #a884ffaa;
   }
-  button {
-    background-color: #9b6dc7;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1.2em;
-    padding: 14px 22px;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 4px 15px rgba(155, 109, 199, 0.5);
-  }
-  button:hover {
-    background-color: #7a54a0;
-  }
+
   .botones {
+    margin-top: 38px;
     display: flex;
-    gap: 18px;
-    margin-top: 36px;
+    gap: 20px;
     justify-content: center;
   }
+  button {
+    background: linear-gradient(135deg, #7a4ed0, #9e77f3);
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 1.15rem;
+    padding: 14px 28px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 14px #7a4ed07f;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  button:hover {
+    background: linear-gradient(135deg, #9e77f3, #7a4ed0);
+    box-shadow: 0 8px 20px #9e77f355;
+  }
+
+  /* Responsive */
   @media (max-width: 480px) {
-    header h1 {
-      font-size: 2.2em;
-      padding: 0 10px;
-    }
     form {
-      margin: 20px 15px 70px 15px;
-      padding: 25px 20px 30px 20px;
-      max-width: 95%;
+      padding: 25px 25px 35px 25px;
+    }
+    header h1 {
+      font-size: 2.2rem;
+    }
+    button {
+      width: 100%;
     }
     .botones {
       flex-direction: column;
-      gap: 12px;
+      gap: 15px;
     }
   }
 </style>
 </head>
 <body>
-  <header>
-    <div class="titulo-bg">
-      <h1>Comida Pregoneros 2025</h1>
-    </div>
-  </header>
 
-  <form id="pedidoForm">
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" required autocomplete="off" />
-    <label for="apellido">Apellido:</label>
-    <input type="text" id="apellido" required autocomplete="off" />
-    <label for="trasera">Trasera de pollo:</label>
-    <input type="number" id="trasera" min="0" value="0" />
-    <label for="cajilla">Cajilla:</label>
-    <input type="number" id="cajilla" min="0" value="0" />
-    <label for="codillo">1/2 Codillo:</label>
-    <input type="number" id="codillo" min="0" value="0" />
-    <label for="paella">Paella:</label>
-    <input type="number" id="paella" min="0" value="0" />
-    <label for="fideua">Fideua:</label>
-    <input type="number" id="fideua" min="0" value="0" />
-    <label for="salchichas">Salchichas al Vino Blanco:</label>
-    <input type="number" id="salchichas" min="0" value="0" />
-    <label for="lomo">Lomo a la Riojana:</label>
-    <input type="number" id="lomo" min="0" value="0" />
-    <label for="jamoncitos">Jamoncitos de Pollo al Chilindrón:</label>
-    <input type="number" id="jamoncitos" min="0" value="0" />
-    <div class="botones">
-      <button type="submit">Guardar Pedido</button>
-      <button type="button" id="descargarBtn">Descargar Pedido</button>
-    </div>
-  </form>
+<header>
+  <img src="assets/20250608_111348_206.png" alt="Logo Comida Pregoneros" />
+  <h1>Comida Pregoneros 2025</h1>
+</header>
 
-  <script>
-    const API_KEY = "patNdhdFMrPI0rEVu.3db56e0e78d6f1bee371e038634a6a909f46dfa5c860380cd7703d14651bedd5";
-    const BASE_ID = "appP2Lrc5NRcaNXF6";
-    const TABLE_NAME = "Comida";
+<form id="pedidoForm">
+  <label for="nombre">Nombre:</label>
+  <input type="text" id="nombre" required autocomplete="off" />
 
-    // Función para normalizar strings: minúsculas y sin espacios extras
-    function normalize(str) {
-      return str.trim().toLowerCase();
+  <label for="apellido">Apellido:</label>
+  <input type="text" id="apellido" required autocomplete="off" />
+
+  <label for="trasera">Trasera de pollo:</label>
+  <input type="number" id="trasera" min="0" value="0" />
+
+  <label for="cajilla">Cajilla:</label>
+  <input type="number" id="cajilla" min="0" value="0" />
+
+  <label for="codillo">1/2 Codillo:</label>
+  <input type="number" id="codillo" min="0" value="0" />
+
+  <label for="paella">Paella:</label>
+  <input type="number" id="paella" min="0" value="0" />
+
+  <label for="fideua">Fideua:</label>
+  <input type="number" id="fideua" min="0" value="0" />
+
+  <label for="salchichas">Salchichas al Vino Blanco:</label>
+  <input type="number" id="salchichas" min="0" value="0" />
+
+  <label for="lomo">Lomo a la Riojana:</label>
+  <input type="number" id="lomo" min="0" value="0" />
+
+  <label for="jamoncitos">Jamoncitos de Pollo al Chilindrón:</label>
+  <input type="number" id="jamoncitos" min="0" value="0" />
+
+  <div class="botones">
+    <button type="submit">Guardar Pedido</button>
+    <button type="button" id="descargarBtn">Descargar Pedido</button>
+  </div>
+</form>
+
+<script>
+  const API_KEY = "patNdhdFMrPI0rEVu.3db56e0e78d6f1bee371e038634a6a909f46dfa5c860380cd7703d14651bedd5";
+  const BASE_ID = "appP2Lrc5NRcaNXF6";
+  const TABLE_NAME = "Comida";
+
+  function normalize(str) {
+    return str.trim().toLowerCase();
+  }
+
+  async function checkDuplicate(nombreNorm, apellidoNorm) {
+    const filterFormula = `AND({Nombre_norm} = "${nombreNorm}", {Apellido_norm} = "${apellidoNorm}")`;
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?filterByFormula=${encodeURIComponent(filterFormula)}`;
+
+    try {
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`
+        }
+      });
+      const data = await res.json();
+      return data.records || [];
+    } catch (err) {
+      console.error("Error al consultar duplicados:", err);
+      return [];
     }
+  }
 
-    // Busca duplicados en Airtable según nombre y apellido normalizados
-    async function checkDuplicate(nombreNorm, apellidoNorm) {
-      const filterFormula = `AND({Nombre_norm} = "${nombreNorm}", {Apellido_norm} = "${apellidoNorm}")`;
-      const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?filterByFormula=${encodeURIComponent(filterFormula)}`;
+  document.getElementById('pedidoForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-      try {
-        const res = await fetch(url, {
+    const nombreRaw = document.getElementById('nombre').value;
+    const apellidoRaw = document.getElementById('apellido').value;
+
+    const nombre = normalize(nombreRaw);
+    const apellido = normalize(apellidoRaw);
+
+    const existing = await checkDuplicate(nombre, apellido);
+
+    const data = {
+      fields: {
+        "Nombre": nombreRaw,
+        "Apellido": apellidoRaw,
+        "Nombre_norm": nombre,
+        "Apellido_norm": apellido,
+        "Trasera de pollo": parseInt(document.getElementById('trasera').value) || 0,
+        "Cajilla": parseInt(document.getElementById('cajilla').value) || 0,
+        "1/2 Codillo": parseInt(document.getElementById('codillo').value) || 0,
+        "Paella": parseInt(document.getElementById('paella').value) || 0,
+        "Fideua": parseInt(document.getElementById('fideua').value) || 0,
+        "Salchichas al Vino Blanco": parseInt(document.getElementById('salchichas').value) || 0,
+        "Lomo a la Riojana": parseInt(document.getElementById('lomo').value) || 0,
+        "Jamoncitos de Pollo al Chilindrón": parseInt(document.getElementById('jamoncitos').value) || 0
+      }
+    };
+
+    try {
+      let response;
+
+      if (existing.length > 0) {
+        const idRegistro = existing[0].id;
+        const actualizar = confirm(`Ya existe un pedido para "${nombreRaw} ${apellidoRaw}". ¿Quieres actualizarlo con los nuevos datos?`);
+        if (!actualizar) return;
+
+        response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${idRegistro}`, {
+          method: "PATCH",
           headers: {
-            Authorization: `Bearer ${API_KEY}`
-          }
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
         });
-        const data = await res.json();
-        return data.records || [];
-      } catch (err) {
-        console.error("Error al consultar duplicados:", err);
-        return [];
+
+      } else {
+        response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
       }
+
+      if (response.ok) {
+        alert("Pedido guardado correctamente ✅");
+        document.getElementById('pedidoForm').reset();
+      } else {
+        const err = await response.json();
+        console.error(err);
+        alert("Error al guardar en Airtable ❌");
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Error de conexión ❌");
     }
+  });
 
-    document.getElementById('pedidoForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
+  document.getElementById('descargarBtn').addEventListener('click', async () => {
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?pageSize=100`;
+    try {
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${API_KEY}` }
+      });
+      if (!res.ok) throw new Error("No se pudo descargar datos");
 
-      const nombreRaw = document.getElementById('nombre').value;
-      const apellidoRaw = document.getElementById('apellido').value;
+      const data = await res.json();
+      const records = data.records;
 
-      const nombre = normalize(nombreRaw);
-      const apellido = normalize(apellidoRaw);
-
-      // Busca duplicados
-      const existing = await checkDuplicate(nombre, apellido);
-
-      // Prepara datos para crear/actualizar registro
-      const data = {
-        fields: {
-          "Nombre": nombreRaw,
-          "Apellido": apellidoRaw,
-          "Nombre_norm": nombre,
-          "Apellido_norm": apellido,
-          "Trasera de pollo": parseInt(document.getElementById('trasera').value) || 0,
-          "Cajilla": parseInt(document.getElementById('cajilla').value) || 0,
-          "1/2 Codillo": parseInt(document.getElementById('codillo').value) || 0,
-          "Paella": parseInt(document.getElementById('paella').value) || 0,
-          "Fideua": parseInt(document.getElementById('fideua').value) || 0,
-          "Salchichas al Vino Blanco": parseInt(document.getElementById('salchichas').value) || 0,
-          "Lomo a la Riojana": parseInt(document.getElementById('lomo').value) || 0,
-          "Jamoncitos de Pollo al Chilindrón": parseInt(document.getElementById('jamoncitos').value) || 0
-        }
-      };
-
-      try {
-        let response;
-
-        if (existing.length > 0) {
-          const idRegistro = existing[0].id;
-          const actualizar = confirm(`Ya existe un pedido para "${nombreRaw} ${apellidoRaw}". ¿Quieres actualizarlo con los nuevos datos?`);
-          if (!actualizar) return;
-
-          // PATCH para actualizar registro
-          response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${idRegistro}`, {
-            method: "PATCH",
-            headers: {
-              "Authorization": `Bearer ${API_KEY}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-          });
-
-        } else {
-          // POST para crear nuevo registro
-          response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${API_KEY}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-          });
-        }
-
-        if (response.ok) {
-          alert("Pedido guardado correctamente ✅");
-          document.getElementById('pedidoForm').reset();
-        } else {
-          const err = await response.json();
-          console.error(err);
-          alert("Error al guardar en Airtable ❌");
-        }
-
-      } catch (error) {
-        console.error(error);
-        alert("Error de conexión ❌");
+      if (records.length === 0) {
+        alert("No hay pedidos para descargar.");
+        return;
       }
-    });
 
-    // Funcionalidad descarga CSV completa de la tabla
-    document.getElementById('descargarBtn').addEventListener('click', async () => {
-      const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?pageSize=100`;
-      try {
-        const res = await fetch(url, {
-          headers: { Authorization: `Bearer ${API_KEY}` }
-        });
-        if (!res.ok) throw new Error("No se pudo descargar datos");
+      const headers = ["Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo", "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana", "Jamoncitos de Pollo al Chilindrón"];
+      const rows = records.map(r => {
+        const f = r.fields;
+        return headers.map(h => (f[h] !== undefined ? f[h] : "")).join(",");
+      });
+      const csvContent = [headers.join(","), ...rows].join("\n");
 
-        const data = await res.json();
-        const records = data.records;
+      const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
+      const urlBlob = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = urlBlob;
+      link.download = "pedidos_comida_pregoneros_2025.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-        if (records.length === 0) {
-          alert("No hay pedidos para descargar.");
-          return;
-        }
+    } catch (error) {
+      console.error(error);
+      alert("Error al descargar datos ❌");
+    }
+  });
+</script>
 
-        // Prepara CSV
-        const headers = ["Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo", "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana", "Jamoncitos de Pollo al Chilindrón"];
-        const rows = records.map(r => {
-          const f = r.fields;
-          return headers.map(h => (f[h] !== undefined ? f[h] : "")).join(",");
-        });
-        const csvContent = [headers.join(","), ...rows].join("\n");
-
-        // Descargar CSV
-        const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
-        const urlBlob = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = urlBlob;
-        link.download = "pedidos_comida_pregoneros_2025.csv";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-      } catch (error) {
-        console.error(error);
-        alert("Error al descargar datos ❌");
-      }
-    });
-  </script>
 </body>
 </html>
