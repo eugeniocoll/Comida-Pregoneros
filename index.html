@@ -1,146 +1,138 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Comida Pregoneros 2025</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: url('assets/20250608_111348_206.png') no-repeat center center fixed;
-            background-size: cover;
-            color: #222;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Comida Pregoneros 2025</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('assets/20250608_111348_206.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #6a0dad; /* morado para todo el texto */
+  }
 
-        /* Capa translúcida para mejorar legibilidad */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, 0.8);
-            z-index: -1;
-        }
+  header {
+    padding: 60px 20px 40px 20px; /* más espacio arriba y abajo para que no se corte */
+    text-align: center;
+    color: #6a0dad;
+    text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.9);
+    background: transparent; /* quitar cualquier fondo */
+  }
 
-        header {
-            padding: 50px 20px;
-            text-align: center;
-            color: #6a0dad; /* morado */
-            text-shadow: 2px 2px 6px rgba(255, 255, 255, 0.9);
-        }
-        header h1 {
-            font-size: 2.8em;
-            margin: 0;
-            font-weight: bold;
-        }
+  header h1 {
+    font-size: 3em;
+    margin: 0;
+    font-weight: bold;
+  }
 
-        form {
-            max-width: 600px;
-            background: white;
-            margin: 20px auto 40px auto;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 10;
-        }
+  form {
+    max-width: 600px;
+    background: rgba(255,255,255,0.9); /* blanco semitransparente para que se lea bien */
+    margin: 20px auto 80px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+  }
 
-        label {
-            font-weight: bold;
-            display: block;
-            margin-top: 15px;
-        }
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+    color: #4b068d; /* morado oscuro para las etiquetas */
+  }
 
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1em;
-        }
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+  }
 
-        button {
-            margin-top: 20px;
-            padding: 10px 15px;
-            background-color: #6a0dad; /* morado */
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: background-color 0.3s ease;
-        }
+  button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #6a0dad;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease;
+  }
 
-        button:hover {
-            background-color: #4b068d;
-        }
+  button:hover {
+    background-color: #4b068d;
+  }
 
-        footer {
-            text-align: center;
-            color: #6a0dad;
-            font-weight: bold;
-            font-size: 1.2em;
-            padding: 20px 10px;
-            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
-        }
-    </style>
+  footer {
+    text-align: center;
+    color: #6a0dad;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 20px 10px;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Comida Pregoneros 2025</h1>
-    </header>
+  <header>
+    <h1>Comida Pregoneros 2025</h1>
+  </header>
 
-    <form id="pedidoForm">
-        <label>Nombre:</label>
-        <input type="text" id="nombre" required />
+  <form id="pedidoForm">
+    <label>Nombre:</label>
+    <input type="text" id="nombre" required />
 
-        <label>Apellido:</label>
-        <input type="text" id="apellido" required />
+    <label>Apellido:</label>
+    <input type="text" id="apellido" required />
 
-        <label>Trasera de pollo:</label>
-        <input type="number" id="trasera" min="0" value="0" />
+    <label>Trasera de pollo:</label>
+    <input type="number" id="trasera" min="0" value="0" />
 
-        <label>Cajilla:</label>
-        <input type="number" id="cajilla" min="0" value="0" />
+    <label>Cajilla:</label>
+    <input type="number" id="cajilla" min="0" value="0" />
 
-        <label>1/2 Codillo:</label>
-        <input type="number" id="codillo" min="0" value="0" />
+    <label>1/2 Codillo:</label>
+    <input type="number" id="codillo" min="0" value="0" />
 
-        <label>Paella:</label>
-        <input type="number" id="paella" min="0" value="0" />
+    <label>Paella:</label>
+    <input type="number" id="paella" min="0" value="0" />
 
-        <label>Fideua:</label>
-        <input type="number" id="fideua" min="0" value="0" />
+    <label>Fideua:</label>
+    <input type="number" id="fideua" min="0" value="0" />
 
-        <label>Salchichas al Vino Blanco:</label>
-        <input type="number" id="salchichas" min="0" value="0" />
+    <label>Salchichas al Vino Blanco:</label>
+    <input type="number" id="salchichas" min="0" value="0" />
 
-        <label>Lomo a la Riojana:</label>
-        <input type="number" id="lomo" min="0" value="0" />
+    <label>Lomo a la Riojana:</label>
+    <input type="number" id="lomo" min="0" value="0" />
 
-        <label>Jamoncitos de Pollo al Chilindrón:</label>
-        <input type="number" id="jamoncitos" min="0" value="0" />
+    <label>Jamoncitos de Pollo al Chilindrón:</label>
+    <input type="number" id="jamoncitos" min="0" value="0" />
 
-        <button type="submit">Guardar Pedido</button>
-    </form>
+    <button type="submit">Guardar Pedido</button>
+  </form>
 
-    <footer>
-        San Martín de la Virgen de Moncayo
-    </footer>
+  <footer>
+    San Martín de la Virgen de Moncayo
+  </footer>
 
-    <script>
-        document.getElementById('pedidoForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('Aquí guardaremos en Airtable más adelante.');
-        });
-    </script>
+  <script>
+    document.getElementById('pedidoForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      alert('Aquí guardaremos en Airtable más adelante.');
+    });
+  </script>
 </body>
 </html>
