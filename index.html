@@ -15,16 +15,14 @@
 
   body {
     background: url('assets/20250608_111348_206.png') no-repeat center center fixed;
-    background-size: contain; /* ver toda la imagen */
+    background-size: contain;
     background-color: #fff;
-    /* para dispositivos móviles que a veces no soportan fixed */
     background-attachment: scroll;
   }
 
-  /* Alternativa para pantallas pequeñas (verticales) */
   @media (max-aspect-ratio: 3/4) {
     body {
-      background-size: cover; /* ocupa todo el fondo aunque se recorte */
+      background-size: cover;
       background-position: center top;
     }
   }
@@ -45,23 +43,23 @@
 
   form {
     max-width: 600px;
-    background: rgba(255, 255, 255, 0.3); /* fondo semitransparente claro */
+    background: rgba(255, 255, 255, 0.4);
     margin: 20px auto 100px auto;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.15);
-    color: #6a0dad;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    color: #9b6dc7;
   }
 
   form label, form input, form button {
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    color: #5a2a72;
   }
 
   label {
     font-weight: bold;
     display: block;
     margin-top: 15px;
-    color: #4b068d;
   }
 
   input[type="text"], input[type="number"] {
@@ -75,19 +73,25 @@
   }
 
   button {
-    margin-top: 20px;
-    padding: 10px 15px;
-    background-color: #6a0dad;
+    background-color: #9b6dc7;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 1.1em;
+    padding: 10px 15px;
     transition: background-color 0.3s ease;
   }
 
   button:hover {
-    background-color: #4b068d;
+    background-color: #7a54a0;
+  }
+
+  /* Botones juntos */
+  .botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
   }
 
   footer {
@@ -104,7 +108,6 @@
     box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
   }
 
-  /* Responsive para móviles */
   @media (max-width: 480px) {
     header h1 {
       font-size: 2em;
@@ -154,7 +157,10 @@
     <label>Jamoncitos de Pollo al Chilindrón:</label>
     <input type="number" id="jamoncitos" min="0" value="0" />
 
-    <button type="submit">Guardar Pedido</button>
+    <div class="botones">
+      <button type="submit">Guardar Pedido</button>
+      <button type="button" id="descargarBtn">Descargar Pedido</button>
+    </div>
   </form>
 
   <footer>
@@ -165,6 +171,10 @@
     document.getElementById('pedidoForm').addEventListener('submit', function(event) {
       event.preventDefault();
       alert('Aquí guardaremos en Airtable más adelante.');
+    });
+
+    document.getElementById('descargarBtn').addEventListener('click', () => {
+      alert('Funcionalidad de descarga pendiente.');
     });
   </script>
 </body>
