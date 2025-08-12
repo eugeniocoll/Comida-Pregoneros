@@ -1,48 +1,67 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Comida Pregoneros 2025</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f8f8;
-        }
-        header {
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/4b/San_Mart%C3%ADn_de_la_Virgen_de_Moncayo.jpg');
+            background: url('assets/20250608_111348_206.png') no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
+            color: #222;
+        }
+
+        /* Capa translúcida para mejorar legibilidad */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: -1;
+        }
+
+        header {
+            background-color: rgba(0, 100, 0, 0.8);
             padding: 50px 20px;
             text-align: center;
             color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
         header h1 {
             font-size: 2.5em;
             margin: 0;
         }
+
         form {
             max-width: 600px;
             background: white;
-            margin: 20px auto;
+            margin: 20px auto 40px auto;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
         }
+
         label {
             font-weight: bold;
             display: block;
             margin-top: 15px;
         }
+
         input[type="text"], input[type="number"] {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
         }
+
         button {
             margin-top: 20px;
             padding: 10px 15px;
@@ -51,7 +70,10 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: #228B22;
         }
@@ -61,36 +83,37 @@
     <header>
         <h1>Comida Pregoneros 2025</h1>
     </header>
+
     <form id="pedidoForm">
         <label>Nombre:</label>
-        <input type="text" id="nombre" required>
+        <input type="text" id="nombre" required />
 
         <label>Apellido:</label>
-        <input type="text" id="apellido" required>
+        <input type="text" id="apellido" required />
 
         <label>Trasera de pollo:</label>
-        <input type="number" id="trasera" min="0" value="0">
+        <input type="number" id="trasera" min="0" value="0" />
 
         <label>Cajilla:</label>
-        <input type="number" id="cajilla" min="0" value="0">
+        <input type="number" id="cajilla" min="0" value="0" />
 
         <label>1/2 Codillo:</label>
-        <input type="number" id="codillo" min="0" value="0">
+        <input type="number" id="codillo" min="0" value="0" />
 
         <label>Paella:</label>
-        <input type="number" id="paella" min="0" value="0">
+        <input type="number" id="paella" min="0" value="0" />
 
         <label>Fideua:</label>
-        <input type="number" id="fideua" min="0" value="0">
+        <input type="number" id="fideua" min="0" value="0" />
 
         <label>Salchichas al Vino Blanco:</label>
-        <input type="number" id="salchichas" min="0" value="0">
+        <input type="number" id="salchichas" min="0" value="0" />
 
         <label>Lomo a la Riojana:</label>
-        <input type="number" id="lomo" min="0" value="0">
+        <input type="number" id="lomo" min="0" value="0" />
 
         <label>Jamoncitos de Pollo al Chilindrón:</label>
-        <input type="number" id="jamoncitos" min="0" value="0">
+        <input type="number" id="jamoncitos" min="0" value="0" />
 
         <button type="submit">Guardar Pedido</button>
     </form>
