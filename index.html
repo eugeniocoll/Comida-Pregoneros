@@ -5,209 +5,205 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Comida Pregoneros 2025</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
   html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    color: #6a0dad;
-    background-color: #fff;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+    color: #3b0d6e;
   }
   body {
-    background: url('assets/20250608_111348_206.png') no-repeat center center fixed;
-    background-size: contain;
-    background-attachment: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 30px 15px 60px 15px;
   }
-  @media (max-aspect-ratio: 3/4) {
-    body { background-size: cover; background-position: center top; }
-  }
-
   header {
     width: 100%;
     max-width: 650px;
-    margin: 40px auto 30px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
+    margin-bottom: 30px;
+    text-align: center;
   }
-
   header img {
+    width: 120px;
     height: auto;
-    max-height: 60px;
-    max-width: 280px; /* Ancho parecido al texto */
-    object-fit: contain;
+    margin-bottom: 12px;
     filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.1));
   }
-
   header h1 {
     font-weight: 600;
     font-size: 2.8rem;
     margin: 0;
     color: #3b0d6e;
     text-shadow: 1px 1px 6px rgba(255 255 255 / 0.8);
-    white-space: nowrap;
   }
 
   form {
-    max-width: 600px;
-    background: rgba(255, 255, 255, 0.55);
-    margin: 0 auto 100px auto;
-    padding: 25px 25px 30px 25px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    color: #5a2a72;
-  }
-  form label, form input, form button {
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.25);
-    color: #5a2a72;
+    width: 100%;
+    max-width: 650px;
+    background: white;
+    border-radius: 16px;
+    padding: 30px 40px 40px 40px;
+    box-shadow: 0 12px 30px rgba(100, 55, 155, 0.25);
+    color: #3b0d6e;
   }
   label {
-    font-weight: bold;
     display: block;
+    font-weight: 600;
     margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: 1.05rem;
   }
   input[type="text"], input[type="number"] {
     width: 100%;
-    padding: 10px 12px;
-    margin-top: 6px;
-    box-sizing: border-box;
-    border: 1px solid #b19cd9;
-    border-radius: 6px;
-    font-size: 1em;
-    background: rgba(255, 255, 255, 0.85);
-    color: #4b1d75;
-    transition: border-color 0.3s ease;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 2px solid #c5b3e8;
+    background-color: #f9f7ff;
+    color: #3b0d6e;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
   input[type="text"]:focus, input[type="number"]:focus {
-    border-color: #6a0dad;
+    border-color: #7a4ed0;
     outline: none;
+    box-shadow: 0 0 8px #a884ffaa;
+  }
+
+  .botones {
+    margin-top: 38px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
   }
   button {
-    background-color: #9b6dc7;
-    color: white;
+    background: linear-gradient(135deg, #7a4ed0, #9e77f3);
     border: none;
-    border-radius: 6px;
+    color: white;
+    font-weight: 600;
+    font-size: 1.15rem;
+    padding: 14px 28px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 1.15em;
-    padding: 12px 18px;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 6px 14px #7a4ed07f;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
   }
   button:hover {
-    background-color: #7a54a0;
+    background: linear-gradient(135deg, #9e77f3, #7a4ed0);
+    box-shadow: 0 8px 20px #9e77f355;
   }
-  .botones {
-    display: flex;
-    gap: 14px;
-    margin-top: 30px;
-  }
+
+  /* Responsive */
   @media (max-width: 480px) {
-    header {
-      flex-direction: column;
-      gap: 10px;
-      margin: 30px 10px 20px 10px;
+    form {
+      padding: 25px 25px 35px 25px;
     }
     header h1 {
-      font-size: 2.2em;
-      white-space: normal;
-      text-align: center;
+      font-size: 2.2rem;
     }
-    form {
-      margin: 15px 10px 120px 10px;
-      padding: 20px 20px 25px 20px;
-      max-width: 95%;
+    button {
+      width: 100%;
+    }
+    .botones {
+      flex-direction: column;
+      gap: 15px;
     }
   }
 </style>
 </head>
 <body>
-  <header>
-    <img src="assets/20250608_111348_206.png" alt="Logo Comida Pregoneros" />
-    <h1>Comida Pregoneros 2025</h1>
-  </header>
 
-  <form id="pedidoForm">
-    <label>Nombre:</label>
-    <input type="text" id="nombre" required />
-    <label>Apellido:</label>
-    <input type="text" id="apellido" required />
-    <label>Trasera de pollo:</label>
-    <input type="number" id="trasera" min="0" value="0" />
-    <label>Cajilla:</label>
-    <input type="number" id="cajilla" min="0" value="0" />
-    <label>1/2 Codillo:</label>
-    <input type="number" id="codillo" min="0" value="0" />
-    <label>Paella:</label>
-    <input type="number" id="paella" min="0" value="0" />
-    <label>Fideua:</label>
-    <input type="number" id="fideua" min="0" value="0" />
-    <label>Salchichas al Vino Blanco:</label>
-    <input type="number" id="salchichas" min="0" value="0" />
-    <label>Lomo a la Riojana:</label>
-    <input type="number" id="lomo" min="0" value="0" />
-    <label>Jamoncitos de Pollo al Chilindrón:</label>
-    <input type="number" id="jamoncitos" min="0" value="0" />
-    <div class="botones">
-      <button type="submit">Guardar Pedido</button>
-      <button type="button" id="descargarBtn">Descargar Pedido</button>
-    </div>
-  </form>
+<header>
+  <img src="assets/20250608_111348_206.png" alt="Logo Comida Pregoneros" />
+  <h1>Comida Pregoneros 2025</h1>
+</header>
 
-  <script>
-    const API_KEY = "patNdhdFMrPI0rEVu.3db56e0e78d6f1bee371e038634a6a909f46dfa5c860380cd7703d14651bedd5";
-    const BASE_ID = "appP2Lrc5NRcaNXF6";
-    const TABLE_NAME = "Comida";
+<form id="pedidoForm">
+  <label for="nombre">Nombre:</label>
+  <input type="text" id="nombre" required autocomplete="off" />
 
-    async function fetchRecordsByNameApellido(nombre, apellido) {
-      const filterFormula = `AND(NOMBRE = "${nombre.toUpperCase()}", APELLIDO = "${apellido.toUpperCase()}")`;
-      const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?filterByFormula=${encodeURIComponent(filterFormula)}`;
+  <label for="apellido">Apellido:</label>
+  <input type="text" id="apellido" required autocomplete="off" />
+
+  <label for="trasera">Trasera de pollo:</label>
+  <input type="number" id="trasera" min="0" value="0" />
+
+  <label for="cajilla">Cajilla:</label>
+  <input type="number" id="cajilla" min="0" value="0" />
+
+  <label for="codillo">1/2 Codillo:</label>
+  <input type="number" id="codillo" min="0" value="0" />
+
+  <label for="paella">Paella:</label>
+  <input type="number" id="paella" min="0" value="0" />
+
+  <label for="fideua">Fideua:</label>
+  <input type="number" id="fideua" min="0" value="0" />
+
+  <label for="salchichas">Salchichas al Vino Blanco:</label>
+  <input type="number" id="salchichas" min="0" value="0" />
+
+  <label for="lomo">Lomo a la Riojana:</label>
+  <input type="number" id="lomo" min="0" value="0" />
+
+  <label for="jamoncitos">Jamoncitos de Pollo al Chilindrón:</label>
+  <input type="number" id="jamoncitos" min="0" value="0" />
+
+  <div class="botones">
+    <button type="submit">Guardar Pedido</button>
+    <button type="button" id="descargarBtn">Descargar Pedido</button>
+  </div>
+</form>
+
+<script>
+  const API_KEY = "patNdhdFMrPI0rEVu.3db56e0e78d6f1bee371e038634a6a909f46dfa5c860380cd7703d14651bedd5";
+  const BASE_ID = "appP2Lrc5NRcaNXF6";
+  const TABLE_NAME = "Comida";
+
+  function normalize(str) {
+    return str.trim().toLowerCase();
+  }
+
+  async function checkDuplicate(nombreNorm, apellidoNorm) {
+    const filterFormula = `AND({Nombre_norm} = "${nombreNorm}", {Apellido_norm} = "${apellidoNorm}")`;
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?filterByFormula=${encodeURIComponent(filterFormula)}`;
+
+    try {
       const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${API_KEY}` }
+        headers: {
+          Authorization: `Bearer ${API_KEY}`
+        }
       });
-      if (!res.ok) throw new Error("Error fetching records");
       const data = await res.json();
-      return data.records;
+      return data.records || [];
+    } catch (err) {
+      console.error("Error al consultar duplicados:", err);
+      return [];
     }
+  }
 
-    async function updateRecord(recordId, fields) {
-      const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${recordId}`;
-      const res = await fetch(url, {
-        method: "PATCH",
-        headers: {
-          "Authorization": `Bearer ${API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ fields })
-      });
-      if (!res.ok) throw new Error("Error updating record");
-      return await res.json();
-    }
+  document.getElementById('pedidoForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-    async function createRecord(fields) {
-      const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`;
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${API_KEY}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ fields })
-      });
-      if (!res.ok) throw new Error("Error creating record");
-      return await res.json();
-    }
+    const nombreRaw = document.getElementById('nombre').value;
+    const apellidoRaw = document.getElementById('apellido').value;
 
-    document.getElementById('pedidoForm').addEventListener('submit', async function(event) {
-      event.preventDefault();
+    const nombre = normalize(nombreRaw);
+    const apellido = normalize(apellidoRaw);
 
-      const nombreInput = document.getElementById('nombre');
-      const apellidoInput = document.getElementById('apellido');
-      const nombre = nombreInput.value.trim();
-      const apellido = apellidoInput.value.trim();
+    const existing = await checkDuplicate(nombre, apellido);
 
-      const fields = {
-        "NOMBRE": nombre.toUpperCase(),
-        "APELLIDO": apellido.toUpperCase(),
+    const data = {
+      fields: {
+        "Nombre": nombreRaw,
+        "Apellido": apellidoRaw,
+        "Nombre_norm": nombre,
+        "Apellido_norm": apellido,
         "Trasera de pollo": parseInt(document.getElementById('trasera').value) || 0,
         "Cajilla": parseInt(document.getElementById('cajilla').value) || 0,
         "1/2 Codillo": parseInt(document.getElementById('codillo').value) || 0,
@@ -216,82 +212,90 @@
         "Salchichas al Vino Blanco": parseInt(document.getElementById('salchichas').value) || 0,
         "Lomo a la Riojana": parseInt(document.getElementById('lomo').value) || 0,
         "Jamoncitos de Pollo al Chilindrón": parseInt(document.getElementById('jamoncitos').value) || 0
-      };
-
-      try {
-        const existingRecords = await fetchRecordsByNameApellido(nombre, apellido);
-        if (existingRecords.length > 0) {
-          const updateConfirm = confirm(`Ya existe un pedido para ${nombre} ${apellido}. ¿Quieres actualizarlo?`);
-          if (updateConfirm) {
-            await updateRecord(existingRecords[0].id, fields);
-            alert("Pedido actualizado correctamente ✅");
-            this.reset();
-            return;
-          } else {
-            alert("No se actualizó el pedido.");
-            return;
-          }
-        }
-        // Si no existe, creamos nuevo
-        await createRecord(fields);
-        alert("Pedido guardado en Airtable ✅");
-        this.reset();
-      } catch (error) {
-        console.error(error);
-        alert("Error al guardar el pedido. Intenta de nuevo.");
       }
-    });
+    };
 
-    document.getElementById('descargarBtn').addEventListener('click', async () => {
-      try {
-        let allRecords = [];
-        let offset = null;
-        do {
-          const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?pageSize=100${offset ? `&offset=${offset}` : ''}`;
-          const res = await fetch(url, {
-            headers: { Authorization: `Bearer ${API_KEY}` }
-          });
-          if (!res.ok) throw new Error("Error al descargar datos");
-          const data = await res.json();
-          allRecords = allRecords.concat(data.records);
-          offset = data.offset;
-        } while (offset);
+    try {
+      let response;
 
-        if(allRecords.length === 0){
-          alert("No hay datos para descargar.");
-          return;
-        }
+      if (existing.length > 0) {
+        const idRegistro = existing[0].id;
+        const actualizar = confirm(`Ya existe un pedido para "${nombreRaw} ${apellidoRaw}". ¿Quieres actualizarlo con los nuevos datos?`);
+        if (!actualizar) return;
 
-        // Convertir a CSV
-        const csvRows = [];
-        const headers = Object.keys(allRecords[0].fields);
-        csvRows.push(headers.join(','));
-
-        allRecords.forEach(record => {
-          const row = headers.map(header => {
-            let val = record.fields[header] || "";
-            if (typeof val === "string" && val.includes(',')) val = `"${val}"`;
-            return val;
-          });
-          csvRows.push(row.join(','));
+        response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${idRegistro}`, {
+          method: "PATCH",
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
         });
 
-        const csvString = csvRows.join('\n');
-        const blob = new Blob([csvString], { type: 'text/csv' });
-        const urlBlob = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = urlBlob;
-        a.download = 'pedidos_comida_pregoneros_2025.csv';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(urlBlob);
-
-      } catch (error) {
-        console.error(error);
-        alert("Error al descargar los pedidos.");
+      } else {
+        response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
       }
-    });
-  </script>
+
+      if (response.ok) {
+        alert("Pedido guardado correctamente ✅");
+        document.getElementById('pedidoForm').reset();
+      } else {
+        const err = await response.json();
+        console.error(err);
+        alert("Error al guardar en Airtable ❌");
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Error de conexión ❌");
+    }
+  });
+
+  document.getElementById('descargarBtn').addEventListener('click', async () => {
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?pageSize=100`;
+    try {
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${API_KEY}` }
+      });
+      if (!res.ok) throw new Error("No se pudo descargar datos");
+
+      const data = await res.json();
+      const records = data.records;
+
+      if (records.length === 0) {
+        alert("No hay pedidos para descargar.");
+        return;
+      }
+
+      const headers = ["Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo", "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana", "Jamoncitos de Pollo al Chilindrón"];
+      const rows = records.map(r => {
+        const f = r.fields;
+        return headers.map(h => (f[h] !== undefined ? f[h] : "")).join(",");
+      });
+      const csvContent = [headers.join(","), ...rows].join("\n");
+
+      const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
+      const urlBlob = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = urlBlob;
+      link.download = "pedidos_comida_pregoneros_2025.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+    } catch (error) {
+      console.error(error);
+      alert("Error al descargar datos ❌");
+    }
+  });
+</script>
+
 </body>
 </html>
