@@ -104,43 +104,78 @@
   <script>
     const API_KEY = "patNdhdFMrPI0rEVu.3db56e0e78d6f1bee371e038634a6a909f46dfa5c860380cd7703d14651bedd5";
     const BASE_ID = "appP2Lrc5NRcaNXF6";
-    const TABLE_ID = "Comida";
+    const TABLE_NAME = "Comida"; // Usamos el nombre de la tabla directamente
+
+    // Función para normalizar nombre y apellido
+    function normalizarTexto(txt) {
+      return txt.trim().toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+    }
 
     document.getElementById('pedidoForm').addEventListener('submit', async function(event) {
       event.preventDefault();
 
-      const data = {
-        fields: {
-          "Nombre": document.getElementById('nombre').value,
-          "Apellido": document.getElementById('apellido').value,
-          "Trasera de pollo": parseInt(document.getElementById('trasera').value) || 0,
-          "Cajilla": parseInt(document.getElementById('cajilla').value) || 0,
-          "1/2 Codillo": parseInt(document.getElementById('codillo').value) || 0,
-          "Paella": parseInt(document.getElementById('paella').value) || 0,
-          "Fideua": parseInt(document.getElementById('fideua').value) || 0,
-          "Salchichas al Vino Blanco": parseInt(document.getElementById('salchichas').value) || 0,
-          "Lomo a la Riojana": parseInt(document.getElementById('lomo').value) || 0,
-          "Jamoncitos de Pollo al Chilindrón": parseInt(document.getElementById('jamoncitos').value) || 0
-        }
-      };
+      const nombre = normalizarTexto(document.getElementById('nombre').value);
+      const apellido = normalizarTexto(document.getElementById('apellido').value);
+
+      // Buscar si ya existe
+      const filtro = `AND({Nombre}="${nombre}",{Apellido}="${apellido}")`;
+      const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?filterByFormula=${encodeURIComponent(filtro)}`;
 
       try {
-        const response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
+        const buscarResp = await fetch(url, {
+          headers: { "Authorization": `Bearer ${API_KEY}` }
         });
+        const buscarData = await buscarResp.json();
 
-        if (response.ok) {
-          alert("Pedido guardado en Airtable ✅");
-          document.getElementById('pedidoForm').reset();
+        const data = {
+          fields: {
+            "Nombre": nombre,
+            "Apellido": apellido,
+            "Trasera de pollo": parseInt(document.getElementById('trasera').value) || 0,
+            "Cajilla": parseInt(document.getElementById('cajilla').value) || 0,
+            "1/2 Codillo": parseInt(document.getElementById('codillo').value) || 0,
+            "Paella": parseInt(document.getElementById('paella').value) || 0,
+            "Fideua": parseInt(document.getElementById('fideua').value) || 0,
+            "Salchichas al Vino Blanco": parseInt(document.getElementById('salchichas').value) || 0,
+            "Lomo a la Riojana": parseInt(document.getElementById('lomo').value) || 0,
+            "Jamoncitos de Pollo al Chilindrón": parseInt(document.getElementById('jamoncitos').value) || 0
+          }
+        };
+
+        if (buscarData.records && buscarData.records.length > 0) {
+          // Ya existe → actualizar
+          const idRegistro = buscarData.records[0].id;
+          if (confirm("Este pedido ya existe. ¿Quieres actualizarlo?")) {
+            const actualizarResp = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}/${idRegistro}`, {
+              method: "PATCH",
+              headers: {
+                "Authorization": `Bearer ${API_KEY}`,
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(data)
+            });
+            if (actualizarResp.ok) {
+              alert("Pedido actualizado ✅");
+            } else {
+              alert("Error al actualizar el pedido ❌");
+            }
+          }
         } else {
-          const err = await response.json();
-          console.error(err);
-          alert("Error al guardar en Airtable ❌");
+          // No existe → crear
+          const crearResp = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${API_KEY}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+          });
+          if (crearResp.ok) {
+            alert("Pedido guardado en Airtable ✅");
+            document.getElementById('pedidoForm').reset();
+          } else {
+            alert("Error al guardar en Airtable ❌");
+          }
         }
       } catch (error) {
         console.error(error);
