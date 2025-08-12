@@ -115,6 +115,10 @@
     }
   }
 </style>
+
+<!-- Cargamos SheetJS para exportar Excel -->
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+
 </head>
 <body>
 
@@ -275,24 +279,24 @@
       }
 
       const headers = ["Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo", "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana", "Jamoncitos de Pollo al Chilindrón"];
-      const rows = records.map(r => {
-        const f = r.fields;
-        return headers.map(h => (f[h] !== undefined ? f[h] : "")).join(",");
-      });
-      const csvContent = [headers.join(","), ...rows].join("\n");
 
-      const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
-      const urlBlob = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = urlBlob;
-      link.download = "pedidos_comida_pregoneros_2025.csv";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Construir matriz para Excel: primero headers, luego filas
+      const wsData = [
+        headers,
+        ...records.map(r => headers.map(h => r.fields[h] !== undefined ? r.fields[h] : ""))
+      ];
+
+      // Crear hoja y libro
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Pedidos");
+
+      // Descargar archivo Excel
+      XLSX.writeFile(wb, "Pedidos_Comida_Pregoneros_2025.xlsx");
 
     } catch (error) {
       console.error(error);
-      alert("Error al descargar datos ❌");
+      alert("Error al descargar pedidos ❌");
     }
   });
 </script>
