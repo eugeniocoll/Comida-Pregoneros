@@ -55,6 +55,16 @@ button {
 button:hover {
   opacity: 0.9;
 }
+.cierre {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  display: inline-block;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.cierre h2 {
+  color: #7a4ed0;
+}
 </style>
 </head>
 <body>
@@ -62,6 +72,7 @@ button:hover {
 <h1>Comida Pregoneros 2025</h1>
 <img src="assets/20250608_111348_206.png" alt="Logo" width="100">
 
+<div id="formularioContainer">
 <form id="pedidoForm">
   <input type="text" name="Nombre" placeholder="Nombre">
   <input type="text" name="Apellido" placeholder="Apellido">
@@ -80,6 +91,7 @@ button:hover {
     <button type="button" id="descargarPDFBtn">Descargar PDF</button>
   </div>
 </form>
+</div>
 
 <script>
 const API_KEY = "TU_API_KEY";
@@ -151,16 +163,14 @@ const fechaLimite = new Date("2025-08-16T00:00:00");
 const ahora = new Date();
 
 if (ahora >= fechaLimite) {
-  document.querySelectorAll('#pedidoForm input, #pedidoForm button[type="submit"]').forEach(el => {
-    el.disabled = true;
-    el.style.opacity = "0.6";
-    el.style.cursor = "not-allowed";
-  });
-
-  const btnGuardar = document.querySelector('#pedidoForm button[type="submit"]');
-  if (btnGuardar) btnGuardar.textContent = "Encuesta cerrada";
-
-  alert("La encuesta ya no está disponible. Para cualquier cambio, contacte con Mirella.");
+  const container = document.getElementById('formularioContainer');
+  container.innerHTML = `
+    <div class="cierre">
+      <img src="assets/20250608_111348_206.png" alt="Logo" width="100">
+      <h2>Encuesta cerrada</h2>
+      <p>La encuesta ya no está disponible.<br>Para cualquier cambio, contacte con Mirella.</p>
+    </div>
+  `;
 }
 </script>
 
