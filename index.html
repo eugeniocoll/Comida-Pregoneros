@@ -118,6 +118,10 @@
 
 <!-- Cargamos SheetJS para exportar Excel -->
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- AutoTable para tablas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 </head>
 <body>
@@ -161,6 +165,7 @@
   <div class="botones">
     <button type="submit">Guardar Pedido</button>
     <button type="button" id="descargarBtn">Descargar Pedido</button>
+    <button type="button" id="descargarPDFBtn">Descargar PDF</button>
   </div>
 </form>
 
@@ -280,23 +285,89 @@
 
       const headers = ["Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo", "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana", "Jamoncitos de Pollo al Chilindrón"];
 
-      // Construir matriz para Excel: primero headers, luego filas
       const wsData = [
         headers,
         ...records.map(r => headers.map(h => r.fields[h] !== undefined ? r.fields[h] : ""))
       ];
 
-      // Crear hoja y libro
       const ws = XLSX.utils.aoa_to_sheet(wsData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Pedidos");
 
-      // Descargar archivo Excel
       XLSX.writeFile(wb, "Pedidos_Comida_Pregoneros_2025.xlsx");
 
     } catch (error) {
       console.error(error);
       alert("Error al descargar pedidos ❌");
+    }
+  });
+
+  document.getElementById('descargarPDFBtn').addEventListener('click', async () => {
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?pageSize=100`;
+
+    try {
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${API_KEY}` }
+      });
+      if (!res.ok) throw new Error("No se pudo descargar datos");
+
+      const data = await res.json();
+      const records = data.records;
+
+      if (records.length === 0) {
+        alert("No hay pedidos para descargar.");
+        return;
+      }
+
+      const headers = [
+        "Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo",
+        "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana",
+        "Jamoncitos de Pollo al Chilindrón"
+      ];
+      const rows = records.map(r => headers.map(h => r.fields[h] !== undefined ? r.fields[h] : ""));
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      // Simular degradado vertical
+      for (let i = 0; i <= pageHeight; i++) {
+        const ratio = i / pageHeight;
+        const r = Math.round(224 + (142 - 224) * ratio); // de #e0c3fc a #8ec5fc
+        const g = Math.round(195 + (197 - 195) * ratio);
+        const b = Math.round(252 + (252 - 252) * ratio);
+        doc.setDrawColor(r, g, b);
+        doc.setFillColor(r, g, b);
+        doc.rect(0, i, pageWidth, 1, "F");
+      }
+
+      const logo = new Image();
+      logo.src = "assets/20250608_111348_206.png";
+
+      logo.onload = () => {
+        doc.addImage(logo, "PNG", pageWidth / 2 - 15, 10, 30, 30);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(18);
+        doc.setTextColor(59, 13, 110);
+        doc.text("Comida Pregoneros 2025", pageWidth / 2, 48, { align: "center" });
+
+        doc.autoTable({
+          startY: 55,
+          head: [headers],
+          body: rows,
+          styles: { fontSize: 8, cellPadding: 2 },
+          headStyles: { fillColor: [122, 78, 208], textColor: [255, 255, 255] },
+          alternateRowStyles: { fillColor: [240, 230, 255] }
+        });
+
+        doc.save("Pedidos_Comida_Pregoneros_2025.pdf");
+      };
+
+    } catch (error) {
+      console.error(error);
+      alert("Error al generar PDF ❌");
     }
   });
 </script>
