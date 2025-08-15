@@ -1,177 +1,290 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Comida Pregoneros 2025</title>
-<link rel="stylesheet" href="styles.css">
-
-<!-- jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<!-- AutoTable -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
-  margin: 0;
-  padding: 20px;
-  text-align: center;
-}
-h1 {
-  color: #3b0d6e;
-}
-form {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  display: inline-block;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-form input {
-  display: block;
-  margin: 10px auto;
-  padding: 8px;
-  width: 80%;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-.botones {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 15px;
-}
-button {
-  background: linear-gradient(90deg, #7a4ed0, #9b6ef3);
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-button:hover {
-  opacity: 0.9;
-}
-.cierre {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  display: inline-block;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-.cierre h2 {
-  color: #7a4ed0;
-}
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+    color: #3b0d6e;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 30px 15px 60px 15px;
+  }
+  header {
+    width: 100%;
+    max-width: 650px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  header img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 12px;
+    filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.1));
+  }
+  header h1 {
+    font-weight: 600;
+    font-size: 2.8rem;
+    margin: 0;
+    color: #3b0d6e;
+    text-shadow: 1px 1px 6px rgba(255 255 255 / 0.8);
+  }
+
+  form {
+    width: 100%;
+    max-width: 650px;
+    background: white;
+    border-radius: 16px;
+    padding: 30px 40px 40px 40px;
+    box-shadow: 0 12px 30px rgba(100, 55, 155, 0.25);
+    color: #3b0d6e;
+  }
+  label {
+    display: block;
+    font-weight: 600;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+  }
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 2px solid #c5b3e8;
+    background-color: #f9f7ff;
+    color: #3b0d6e;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  input[type="text"]:focus, input[type="number"]:focus {
+    border-color: #7a4ed0;
+    outline: none;
+    box-shadow: 0 0 8px #a884ffaa;
+  }
+
+  .botones {
+    margin-top: 38px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  button {
+    background: linear-gradient(135deg, #7a4ed0, #9e77f3);
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 1.15rem;
+    padding: 14px 28px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 14px #7a4ed07f;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  button:hover {
+    background: linear-gradient(135deg, #9e77f3, #7a4ed0);
+    box-shadow: 0 8px 20px #9e77f355;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    form {
+      padding: 25px 25px 35px 25px;
+    }
+    header h1 {
+      font-size: 2.2rem;
+    }
+    button {
+      width: 100%;
+    }
+    .botones {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
 </style>
+
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
-<h1>Comida Pregoneros 2025</h1>
-<img src="assets/20250608_111348_206.png" alt="Logo" width="100">
+<header>
+  <img src="assets/20250608_111348_206.png" alt="Logo Comida Pregoneros" />
+  <h1>Comida Pregoneros 2025</h1>
+</header>
 
-<div id="formularioContainer">
 <form id="pedidoForm">
-  <input type="text" name="Nombre" placeholder="Nombre">
-  <input type="text" name="Apellido" placeholder="Apellido">
-  <input type="number" name="Trasera de pollo" placeholder="Trasera de pollo">
-  <input type="number" name="Cajilla" placeholder="Cajilla">
-  <input type="number" name="1/2 Codillo" placeholder="1/2 Codillo">
-  <input type="number" name="Paella" placeholder="Paella">
-  <input type="number" name="Fideua" placeholder="Fideua">
-  <input type="number" name="Salchichas al Vino Blanco" placeholder="Salchichas al Vino Blanco">
-  <input type="number" name="Lomo a la Riojana" placeholder="Lomo a la Riojana">
-  <input type="number" name="Jamoncitos de Pollo al Chilindrón" placeholder="Jamoncitos de Pollo al Chilindrón">
-  
+  <label for="nombre">Nombre:</label>
+  <input type="text" id="nombre" required autocomplete="off" />
+
+  <label for="apellido">Apellido:</label>
+  <input type="text" id="apellido" required autocomplete="off" />
+
+  <label for="trasera">Trasera de pollo:</label>
+  <input type="number" id="trasera" min="0" value="0" />
+
+  <label for="cajilla">Cajilla:</label>
+  <input type="number" id="cajilla" min="0" value="0" />
+
+  <label for="codillo">1/2 Codillo:</label>
+  <input type="number" id="codillo" min="0" value="0" />
+
+  <label for="paella">Paella:</label>
+  <input type="number" id="paella" min="0" value="0" />
+
+  <label for="fideua">Fideua:</label>
+  <input type="number" id="fideua" min="0" value="0" />
+
+  <label for="salchichas">Salchichas al Vino Blanco:</label>
+  <input type="number" id="salchichas" min="0" value="0" />
+
+  <label for="lomo">Lomo a la Riojana:</label>
+  <input type="number" id="lomo" min="0" value="0" />
+
+  <label for="jamoncitos">Jamoncitos de Pollo al Chilindrón:</label>
+  <input type="number" id="jamoncitos" min="0" value="0" />
+
   <div class="botones">
     <button type="submit">Guardar Pedido</button>
-    <button type="button" id="descargarBtn">Descargar Pedido</button>
-    <button type="button" id="descargarPDFBtn">Descargar PDF</button>
+    <button type="button" id="descargarBtn">Descargar Excel</button>
+    <button type="button" id="pdfBtn">Descargar PDF</button>
   </div>
 </form>
-</div>
 
 <script>
-const API_KEY = "TU_API_KEY";
-const BASE_ID = "TU_BASE_ID";
-const TABLE_NAME = "Pedidos";
+  const API_KEY = "patNdhdFMrPI0rEVu.3db56e0e78d6f1bee371e038634a6a909f46dfa5c860380cd7703d14651bedd5";
+  const BASE_ID = "appP2Lrc5NRcaNXF6";
+  const TABLE_NAME = "Comida";
 
-document.getElementById('descargarPDFBtn').addEventListener('click', async () => {
-  const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?pageSize=100`;
+  const cierreEncuesta = new Date("2025-08-16T00:00:00");
 
-  try {
-    const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${API_KEY}` }
-    });
-    if (!res.ok) throw new Error("No se pudo descargar datos");
+  function normalize(str) {
+    return str.trim().toLowerCase();
+  }
 
-    const data = await res.json();
-    const records = data.records;
+  async function checkDuplicate(nombreNorm, apellidoNorm) {
+    const filterFormula = `AND({Nombre_norm} = "${nombreNorm}", {Apellido_norm} = "${apellidoNorm}")`;
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?filterByFormula=${encodeURIComponent(filterFormula)}`;
+    try {
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${API_KEY}` } });
+      const data = await res.json();
+      return data.records || [];
+    } catch {
+      return [];
+    }
+  }
 
-    if (records.length === 0) {
-      alert("No hay pedidos para descargar.");
+  document.getElementById('pedidoForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (new Date() >= cierreEncuesta) {
+      alert("La encuesta ha finalizado. Para cualquier cambio, contacte con Mirella.");
       return;
     }
 
-    const headers = [
-      "Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo",
-      "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana",
-      "Jamoncitos de Pollo al Chilindrón"
-    ];
-    const rows = records.map(r => headers.map(h => r.fields[h] !== undefined ? r.fields[h] : ""));
+    const nombreRaw = document.getElementById('nombre').value;
+    const apellidoRaw = document.getElementById('apellido').value;
+    const nombre = normalize(nombreRaw);
+    const apellido = normalize(apellidoRaw);
+    const existing = await checkDuplicate(nombre, apellido);
+
+    const data = {
+      fields: {
+        "Nombre": nombreRaw,
+        "Apellido": apellidoRaw,
+        "Nombre_norm": nombre,
+        "Apellido_norm": apellido,
+        "Trasera de pollo": parseInt(document.getElementById('trasera').value) || 0,
+        "Cajilla": parseInt(document.getElementById('cajilla').value) || 0,
+        "1/2 Codillo": parseInt(document.getElementById('codillo').value) || 0,
+        "Paella": parseInt(document.getElementById('paella').value) || 0,
+        "Fideua": parseInt(document.getElementById('fideua').value) || 0,
+        "Salchichas al Vino Blanco": parseInt(document.getElementById('salchichas').value) || 0,
+        "Lomo a la Riojana": parseInt(document.getElementById('lomo').value) || 0,
+        "Jamoncitos de Pollo al Chilindrón": parseInt(document.getElementById('jamoncitos').value) || 0
+      }
+    };
+
+    let response;
+    if (existing.length > 0) {
+      const idRegistro = existing[0].id;
+      const actualizar = confirm(`Ya existe un pedido para "${nombreRaw} ${apellidoRaw}". ¿Quieres actualizarlo con los nuevos datos?`);
+      if (!actualizar) return;
+      response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${idRegistro}`, {
+        method: "PATCH",
+        headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    } else {
+      response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    }
+
+    if (response.ok) {
+      alert("Pedido guardado correctamente ✅");
+      document.getElementById('pedidoForm').reset();
+    } else {
+      alert("Error al guardar en Airtable ❌");
+    }
+  });
+
+  document.getElementById('descargarBtn').addEventListener('click', async () => {
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?pageSize=100`;
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${API_KEY}` } });
+    const data = await res.json();
+    const records = data.records;
+    if (records.length === 0) return alert("No hay pedidos para descargar.");
+    const headers = ["Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo", "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana", "Jamoncitos de Pollo al Chilindrón"];
+    const wsData = [headers, ...records.map(r => headers.map(h => r.fields[h] || ""))];
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Pedidos");
+    XLSX.writeFile(wb, "Pedidos_Comida_Pregoneros_2025.xlsx");
+  });
+
+  document.getElementById('pdfBtn').addEventListener('click', async () => {
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?pageSize=100`;
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${API_KEY}` } });
+    const data = await res.json();
+    const records = data.records;
+    if (records.length === 0) return alert("No hay pedidos para descargar.");
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    doc.setFillColor(224, 195, 252);
-    doc.rect(0, 0, pageWidth, pageHeight, "F");
+    // Encabezado
+    doc.addImage("assets/20250608_111348_206.png", "PNG", 10, 5, 20, 20);
+    doc.setFontSize(16);
+    doc.text("Comida Pregoneros 2025", 35, 15);
 
-    const logo = new Image();
-    logo.src = "assets/20250608_111348_206.png";
+    doc.setFontSize(10);
+    let y = 30;
+    records.forEach(r => {
+      const line = `${r.fields["Nombre"]} ${r.fields["Apellido"]} - Trasera:${r.fields["Trasera de pollo"]||0}, Cajilla:${r.fields["Cajilla"]||0}, Codillo:${r.fields["1/2 Codillo"]||0}, Paella:${r.fields["Paella"]||0}, Fideua:${r.fields["Fideua"]||0}, Salchichas:${r.fields["Salchichas al Vino Blanco"]||0}, Lomo:${r.fields["Lomo a la Riojana"]||0}, Jamoncitos:${r.fields["Jamoncitos de Pollo al Chilindrón"]||0}`;
+      doc.text(line, 10, y);
+      y += 6;
+      if (y > 280) { doc.addPage(); y = 20; }
+    });
 
-    logo.onload = () => {
-      doc.addImage(logo, "PNG", pageWidth / 2 - 15, 10, 30, 30);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(18);
-      doc.setTextColor(59, 13, 110);
-      doc.text("Comida Pregoneros 2025", pageWidth / 2, 48, { align: "center" });
-
-      doc.autoTable({
-        startY: 55,
-        head: [headers],
-        body: rows,
-        styles: { fontSize: 8, cellPadding: 2 },
-        headStyles: { fillColor: [122, 78, 208], textColor: [255, 255, 255] },
-        alternateRowStyles: { fillColor: [240, 230, 255] }
-      });
-
-      doc.save("Pedidos_Comida_Pregoneros_2025.pdf");
-    };
-
-  } catch (error) {
-    console.error(error);
-    alert("Error al generar PDF ❌");
-  }
-});
-
-// 🔒 Bloqueo automático a partir del 16/08/2025 00:00:00
-const fechaLimite = new Date("2025-08-16T00:00:00");
-const ahora = new Date();
-
-if (ahora >= fechaLimite) {
-  const container = document.getElementById('formularioContainer');
-  container.innerHTML = `
-    <div class="cierre">
-      <img src="assets/20250608_111348_206.png" alt="Logo" width="100">
-      <h2>Encuesta cerrada</h2>
-      <p>La encuesta ya no está disponible.<br>Para cualquier cambio, contacte con Mirella.</p>
-    </div>
-  `;
-}
+    doc.save("Pedidos_Comida_Pregoneros_2025.pdf");
+  });
 </script>
 
 </body>
