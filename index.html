@@ -21,64 +21,64 @@
     align-items: center;
     justify-content: flex-start;
     min-height: 100vh;
-    padding: 20px 10px 40px 10px;
+    padding: 30px 15px 60px 15px;
   }
   header {
     width: 100%;
     max-width: 650px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     text-align: center;
   }
   header img {
-    width: 100px;
+    width: 120px;
     height: auto;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.1));
   }
   header h1 {
     font-weight: 600;
-    font-size: 2.2rem;
+    font-size: 2.8rem;
     margin: 0;
     color: #3b0d6e;
     text-shadow: 1px 1px 6px rgba(255 255 255 / 0.8);
   }
+
   form {
     width: 100%;
     max-width: 650px;
     background: white;
     border-radius: 16px;
-    padding: 20px 25px 30px 25px;
-    box-shadow: 0 8px 20px rgba(100, 55, 155, 0.25);
+    padding: 30px 40px 40px 40px;
+    box-shadow: 0 12px 30px rgba(100, 55, 155, 0.25);
     color: #3b0d6e;
   }
   label {
     display: block;
-    font-weight: 500;
-    margin-top: 14px;
-    margin-bottom: 6px;
-    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-size: 1.05rem;
   }
   input[type="text"], input[type="number"] {
     width: 100%;
-    padding: 10px 12px;
-    font-size: 0.95rem;
-    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border-radius: 10px;
     border: 2px solid #c5b3e8;
     background-color: #f9f7ff;
     color: #3b0d6e;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    box-sizing: border-box;
   }
   input[type="text"]:focus, input[type="number"]:focus {
     border-color: #7a4ed0;
     outline: none;
-    box-shadow: 0 0 6px #a884ffaa;
+    box-shadow: 0 0 8px #a884ffaa;
   }
+
   .botones {
-    margin-top: 28px;
+    margin-top: 38px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+    gap: 20px;
     justify-content: center;
   }
   button {
@@ -86,9 +86,9 @@
     border: none;
     color: white;
     font-weight: 600;
-    font-size: 1rem;
-    padding: 12px 20px;
-    border-radius: 10px;
+    font-size: 1.15rem;
+    padding: 14px 28px;
+    border-radius: 12px;
     cursor: pointer;
     box-shadow: 0 6px 14px #7a4ed07f;
     transition: background 0.3s ease, box-shadow 0.3s ease;
@@ -97,12 +97,32 @@
     background: linear-gradient(135deg, #9e77f3, #7a4ed0);
     box-shadow: 0 8px 20px #9e77f355;
   }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    form {
+      padding: 25px 25px 35px 25px;
+    }
+    header h1 {
+      font-size: 2.2rem;
+    }
+    button {
+      width: 100%;
+    }
+    .botones {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
 </style>
 
-<!-- Librerías -->
+<!-- Cargamos SheetJS para exportar Excel -->
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<!-- jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- AutoTable para tablas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
 </head>
 <body>
 
@@ -144,48 +164,49 @@
 
   <div class="botones">
     <button type="submit">Guardar Pedido</button>
-    <button type="button" id="descargarBtn">Descargar Excel</button>
+    <button type="button" id="descargarBtn">Descargar Pedido</button>
     <button type="button" id="descargarPDFBtn">Descargar PDF</button>
   </div>
 </form>
 
 <script>
-  const API_KEY = "TU_API_KEY";
-  const BASE_ID = "TU_BASE_ID";
+  const API_KEY = "patNdhdFMrPI0rEVu.3db56e0e78d6f1bee371e038634a6a909f46dfa5c860380cd7703d14651bedd5";
+  const BASE_ID = "appP2Lrc5NRcaNXF6";
   const TABLE_NAME = "Comida";
 
   function normalize(str) {
     return str.trim().toLowerCase();
   }
 
-  // Bloqueo automático el 16/08/2025 a las 00:00:00
-  const fechaLimite = new Date("2025-08-16T00:00:00");
-  if (new Date() >= fechaLimite) {
-    document.querySelectorAll('#pedidoForm input, #pedidoForm button[type="submit"]').forEach(el => {
-      el.disabled = true;
-      el.style.opacity = "0.6";
-      el.style.cursor = "not-allowed";
-    });
-    const btnGuardar = document.querySelector('#pedidoForm button[type="submit"]');
-    if (btnGuardar) btnGuardar.textContent = "Encuesta cerrada";
-    alert("La encuesta ya no está disponible. Para cualquier cambio, contacte con Mirella.");
-  }
-
   async function checkDuplicate(nombreNorm, apellidoNorm) {
     const filterFormula = `AND({Nombre_norm} = "${nombreNorm}", {Apellido_norm} = "${apellidoNorm}")`;
     const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?filterByFormula=${encodeURIComponent(filterFormula)}`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${API_KEY}` } });
-    const data = await res.json();
-    return data.records || [];
+
+    try {
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`
+        }
+      });
+      const data = await res.json();
+      return data.records || [];
+    } catch (err) {
+      console.error("Error al consultar duplicados:", err);
+      return [];
+    }
   }
 
   document.getElementById('pedidoForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const nombreRaw = document.getElementById('nombre').value;
     const apellidoRaw = document.getElementById('apellido').value;
+
     const nombre = normalize(nombreRaw);
     const apellido = normalize(apellidoRaw);
+
     const existing = await checkDuplicate(nombre, apellido);
+
     const data = {
       fields: {
         "Nombre": nombreRaw,
@@ -202,61 +223,152 @@
         "Jamoncitos de Pollo al Chilindrón": parseInt(document.getElementById('jamoncitos').value) || 0
       }
     };
-    let response;
-    if (existing.length > 0) {
-      const idRegistro = existing[0].id;
-      const actualizar = confirm(`Ya existe un pedido para "${nombreRaw} ${apellidoRaw}". ¿Quieres actualizarlo con los nuevos datos?`);
-      if (!actualizar) return;
-      response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${idRegistro}`, {
-        method: "PATCH",
-        headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-    } else {
-      response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
+
+    try {
+      let response;
+
+      if (existing.length > 0) {
+        const idRegistro = existing[0].id;
+        const actualizar = confirm(`Ya existe un pedido para "${nombreRaw} ${apellidoRaw}". ¿Quieres actualizarlo con los nuevos datos?`);
+        if (!actualizar) return;
+
+        response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${idRegistro}`, {
+          method: "PATCH",
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+      } else {
+        response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+      }
+
+      if (response.ok) {
+        alert("Pedido guardado correctamente ✅");
+        document.getElementById('pedidoForm').reset();
+      } else {
+        const err = await response.json();
+        console.error(err);
+        alert("Error al guardar en Airtable ❌");
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert("Error de conexión ❌");
     }
-    if (response.ok) {
-      alert("Pedido guardado correctamente ✅");
-      document.getElementById('pedidoForm').reset();
-    } else {
-      alert("Error al guardar en Airtable ❌");
+  });
+
+  document.getElementById('descargarBtn').addEventListener('click', async () => {
+    const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?pageSize=100`;
+    try {
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${API_KEY}` }
+      });
+      if (!res.ok) throw new Error("No se pudo descargar datos");
+
+      const data = await res.json();
+      const records = data.records;
+
+      if (records.length === 0) {
+        alert("No hay pedidos para descargar.");
+        return;
+      }
+
+      const headers = ["Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo", "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana", "Jamoncitos de Pollo al Chilindrón"];
+
+      const wsData = [
+        headers,
+        ...records.map(r => headers.map(h => r.fields[h] !== undefined ? r.fields[h] : ""))
+      ];
+
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Pedidos");
+
+      XLSX.writeFile(wb, "Pedidos_Comida_Pregoneros_2025.xlsx");
+
+    } catch (error) {
+      console.error(error);
+      alert("Error al descargar pedidos ❌");
     }
   });
 
   document.getElementById('descargarPDFBtn').addEventListener('click', async () => {
     const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?pageSize=100`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${API_KEY}` } });
-    if (!res.ok) return alert("Error al descargar datos");
-    const data = await res.json();
-    const records = data.records;
-    if (!records.length) return alert("No hay pedidos para descargar.");
-    const headers = ["Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo", "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana", "Jamoncitos de Pollo al Chilindrón"];
-    const rows = records.map(r => headers.map(h => r.fields[h] || ""));
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const logo = new Image();
-    logo.src = "assets/20250608_111348_206.png";
-    logo.onload = () => {
-      doc.addImage(logo, "PNG", pageWidth / 2 - 15, 10, 30, 30);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(16);
-      doc.setTextColor(59, 13, 110);
-      doc.text("Comida Pregoneros 2025", pageWidth / 2, 48, { align: "center" });
-      doc.autoTable({
-        startY: 55,
-        head: [headers],
-        body: rows,
-        styles: { fontSize: 8, cellPadding: 2 },
-        headStyles: { fillColor: [122, 78, 208], textColor: [255, 255, 255] },
-        alternateRowStyles: { fillColor: [240, 230, 255] }
+
+    try {
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${API_KEY}` }
       });
-      doc.save("Pedidos_Comida_Pregoneros_2025.pdf");
-    };
+      if (!res.ok) throw new Error("No se pudo descargar datos");
+
+      const data = await res.json();
+      const records = data.records;
+
+      if (records.length === 0) {
+        alert("No hay pedidos para descargar.");
+        return;
+      }
+
+      const headers = [
+        "Nombre", "Apellido", "Trasera de pollo", "Cajilla", "1/2 Codillo",
+        "Paella", "Fideua", "Salchichas al Vino Blanco", "Lomo a la Riojana",
+        "Jamoncitos de Pollo al Chilindrón"
+      ];
+      const rows = records.map(r => headers.map(h => r.fields[h] !== undefined ? r.fields[h] : ""));
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      // Simular degradado vertical
+      for (let i = 0; i <= pageHeight; i++) {
+        const ratio = i / pageHeight;
+        const r = Math.round(224 + (142 - 224) * ratio); // de #e0c3fc a #8ec5fc
+        const g = Math.round(195 + (197 - 195) * ratio);
+        const b = Math.round(252 + (252 - 252) * ratio);
+        doc.setDrawColor(r, g, b);
+        doc.setFillColor(r, g, b);
+        doc.rect(0, i, pageWidth, 1, "F");
+      }
+
+      const logo = new Image();
+      logo.src = "assets/20250608_111348_206.png";
+
+      logo.onload = () => {
+        doc.addImage(logo, "PNG", pageWidth / 2 - 15, 10, 30, 30);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(18);
+        doc.setTextColor(59, 13, 110);
+        doc.text("Comida Pregoneros 2025", pageWidth / 2, 48, { align: "center" });
+
+        doc.autoTable({
+          startY: 55,
+          head: [headers],
+          body: rows,
+          styles: { fontSize: 8, cellPadding: 2 },
+          headStyles: { fillColor: [122, 78, 208], textColor: [255, 255, 255] },
+          alternateRowStyles: { fillColor: [240, 230, 255] }
+        });
+
+        doc.save("Pedidos_Comida_Pregoneros_2025.pdf");
+      };
+
+    } catch (error) {
+      console.error(error);
+      alert("Error al generar PDF ❌");
+    }
   });
 </script>
 
