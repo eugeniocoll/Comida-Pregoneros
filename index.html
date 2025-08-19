@@ -147,17 +147,29 @@ button:hover {
 </form>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-const AIRTABLE_API_KEY = 'patGOB8PqOYxGzCgd.bf5681a61ae323be8558e9ada8f6fdfeec51f4e973ab2e30bc9938bb5aca1f88';
-const AIRTABLE_BASE_ID = 'app6lU2xK9KPUFO0K';
+const AIRTABLE_API_KEY = 'TU_API_KEY';
+const AIRTABLE_BASE_ID = 'TU_BASE_ID';
 const AIRTABLE_TABLE_NAME = 'Pedidos';
 
-const categorias = ['Salpicon','Ensalada_arroz','Ensalada_aragonesa','Revuelto_setas','Pimientos_bacalao','Ensaladilla_rusa','Alubias','Tostada_bonito','Tostada_escabechados','Cajilla','Morcillo','Trasera','Codillo','Lubina','Canelones','Calamares','Bacalao','Piernecita','Gorrin','Flan','Arroz_leche','Natillas','Yogur','Brownie'];
+const categorias = ['salpicon','ensalada_arroz','ensalada_aragonesa','revuelto_setas','pimientos_bacalao','ensaladilla_rusa','alubias','tostada_bonito','tostada_escabechados','cajilla','morcillo','trasera','codillo','lubina','canelones','calamares','bacalao','piernecita','gorrin','flan','arroz_leche','natillas','yogur','brownie'];
+
+function normalizar(texto) {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
 
 function obtenerDatos() {
-    const datos = {Nombre: document.getElementById('nombre').value, Apellido: document.getElementById('apellido').value};
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const datos = {
+        Nombre: nombre,
+        Apellido: apellido,
+        Nombre_norm: normalizar(nombre),
+        Apellido_norm: normalizar(apellido)
+    };
     categorias.forEach(cat => {
-        const val = parseInt(document.getElementById(cat.toLowerCase()).value);
+        const val = parseInt(document.getElementById(cat).value);
         if(val > 0) datos[cat] = val;
     });
     return datos;
@@ -199,36 +211,34 @@ function exportPDF() {
         const datos = obtenerDatos();
         doc.text(`Cliente: ${datos.Nombre} ${datos.Apellido}`, 10, y);
         y += 10;
-        for(const [key, val] of Object.entries(datos)) {
-            if(key !== 'Nombre' && key !== 'Apellido') {
-                const nombreLegible = key.replace(/_/g,' ').toUpperCase();
-                doc.text(`${nombreLegible}: ${val}`, 10, y);
-                y += 7;
-            }
+        const tabla = [['Plato','Cantidad']];
+        for(const cat of categorias) {
+            if(datos[cat]) tabla.push([cat.replace(/_/g,' ').toUpperCase(), datos[cat]]);
         }
+        doc.autoTable({
+            startY: y,
+            head: [tabla[0]],
+            body: tabla.slice(1),
+            theme: 'grid',
+            headStyles: { fillColor: [142, 68, 173] },
+        });
         doc.save('pedido.pdf');
     };
 }
 
 function exportExcel() {
-    let csvContent = "data:text/csv;charset=utf-8,";
     const datos = obtenerDatos();
-    csvContent += `Nombre,${datos.Nombre},Apellido,${datos.Apellido}\n`;
-    for(const [key, val] of Object.entries(datos)) {
-        if(key !== 'Nombre' && key !== 'Apellido') {
-            const nombreLegible = key.replace(/_/g,' ').toUpperCase();
-            csvContent += `${nombreLegible},${val}\n`;
-        }
-    }
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "pedido.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const ws_data = [['Plato','Cantidad']];
+    categorias.forEach(cat => {
+        if(datos[cat]) ws_data.push([cat.replace(/_/g,' ').toUpperCase(), datos[cat]]);
+    });
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(ws_data);
+    XLSX.utils.book_append_sheet(wb, ws, 'Pedido');
+    XLSX.writeFile(wb, 'pedido.xlsx');
 }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </body>
 </html>
 
