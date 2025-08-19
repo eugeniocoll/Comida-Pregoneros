@@ -7,66 +7,84 @@
 <style>
   body {
     font-family: Arial, sans-serif;
-    margin: 20px;
-    background: #f7f7f7;
+    margin: 0;
+    background: linear-gradient(135deg, #f8f0ff, #e8dfff); /* morado pastel suave degradado */
   }
+
   header {
     text-align: center;
-    margin-bottom: 30px;
+    margin: 20px 0;
   }
+
   header img {
     max-width: 200px;
     height: auto;
   }
+
   h1 {
-    color: #2c3e50;
+    color: #6a0dad;
     text-align: center;
+    margin-bottom: 30px;
   }
+
   form {
     max-width: 1000px;
     margin: auto;
+    padding: 0 15px;
   }
+
   .seccion {
     margin-bottom: 30px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.85); /* un fondo suave para cada sección */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
+
   .seccion h2 {
     margin-bottom: 15px;
-    color: #3498db;
-    border-bottom: 2px solid #3498db;
+    color: #8e44ad;
+    border-bottom: 2px solid #8e44ad;
     padding-bottom: 5px;
   }
+
   .grid-platos {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 15px;
   }
+
   .plato {
     background: #fff;
     padding: 10px;
     border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
   .plato input[type="number"] {
     width: 60px;
     padding: 3px;
     border: 1px solid #ccc;
     border-radius: 5px;
   }
+
   input[type="text"] {
     width: 200px;
     padding: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
   }
+
   .botones {
     text-align: center;
     margin-top: 20px;
   }
+
   button {
-    background: #3498db;
+    background: #8e44ad;
     color: white;
     border: none;
     border-radius: 5px;
@@ -75,15 +93,16 @@
     cursor: pointer;
     font-size: 14px;
   }
+
   button:hover {
-    background: #2980b9;
+    background: #732d91;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <img src="ruta_del_logo.png" alt="Logo">
+  <img src="logo.png" alt="Logo">
 </header>
 
 <h1>Formulario de Pedidos</h1>
@@ -200,3 +219,4 @@
 
 </body>
 </html>
+
