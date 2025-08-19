@@ -2,105 +2,198 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Comida Pregoneros 2025</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    h1 { text-align: center; color: #333; }
-    form { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    label { display: block; margin-top: 10px; }
-    input[type="text"], input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; }
-    button { margin-top: 15px; padding: 10px 15px; background: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #0056b3; }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #f8f0ff, #e8dfff);
+}
+header {
+    text-align: center;
+    margin: 20px 0;
+}
+header img {
+    max-width: 200px;
+    height: auto;
+}
+h1 {
+    color: #6a0dad;
+    text-align: center;
+    margin-bottom: 30px;
+}
+form {
+    max-width: 1000px;
+    margin: auto;
+    padding: 0 15px;
+}
+.seccion {
+    margin-bottom: 30px;
+    padding: 15px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.seccion h2 {
+    margin-bottom: 15px;
+    color: #8e44ad;
+    border-bottom: 2px solid #8e44ad;
+    padding-bottom: 5px;
+}
+.grid-platos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+}
+.plato {
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.plato input[type="number"] {
+    width: 60px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+input[type="text"] {
+    width: 200px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.botones {
+    text-align: center;
+    margin-top: 20px;
+}
+button {
+    background: #8e44ad;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+button:hover {
+    background: #732d91;
+}
 </style>
 </head>
 <body>
-
+<header>
+<img src="logo.png" alt="Logo">
+</header>
 <h1>Comida Pregoneros 2025</h1>
+<form id="pedidoForm">
+<div class="seccion">
+<label>Nombre: <input type="text" id="nombre" required></label>
+<label>Apellido: <input type="text" id="apellido" required></label>
+</div>
 
-<form id="formularioPedidos">
-    <label>Nombre
-        <input type="text" id="nombre" required>
-    </label>
-    <label>Apellido
-        <input type="text" id="apellido" required>
-    </label>
+<div class="seccion">
+<h2>Primeros Platos</h2>
+<div class="grid-platos">
+<div class="plato">SALPICÓN DE MARISCO <input type="number" id="salpicon" min="0" value="0"></div>
+<div class="plato">ENSALADA DE ARROZ <input type="number" id="ensalada_arroz" min="0" value="0"></div>
+<div class="plato">ENSALADA ARAGONESA <input type="number" id="ensalada_aragonesa" min="0" value="0"></div>
+<div class="plato">REVUELTO DE SETAS CON GAMBAS <input type="number" id="revuelto_setas" min="0" value="0"></div>
+<div class="plato">PIMIENTOS RELLENOS DE BACALAO <input type="number" id="pimientos_bacalao" min="0" value="0"></div>
+<div class="plato">ENSALADILLA RUSA <input type="number" id="ensaladilla_rusa" min="0" value="0"></div>
+<div class="plato">ALUBIAS POCHAS CON BOLETUS <input type="number" id="alubias" min="0" value="0"></div>
+<div class="plato">TOSTADA DE VERDURAS CON BONITO (SUPLEMENTO 7€) <input type="number" id="tostada_bonito" min="0" value="0"></div>
+<div class="plato">TOSTADA DE VERDURAS CON ESCABECHADOS (SUPLEMENTO 9€)<input type="number" id="tostada_escabechados" min="0" value="0"></div>
+</div>
+</div>
 
-    <h3>Primeros Platos</h3>
-    <label>Ensalada
-        <input type="number" id="ensalada" min="0" value="0">
-    </label>
-    <label>Sopa
-        <input type="number" id="sopa" min="0" value="0">
-    </label>
+<div class="seccion">
+<h2>Segundos Platos</h2>
+<div class="grid-platos">
+<div class="plato">CAJILLA AL HORNO CON PATATAS <input type="number" id="cajilla" min="0" value="0"></div>
+<div class="plato">MORCILLO DE TERNERA CON SETAS <input type="number" id="morcillo" min="0" value="0"></div>
+<div class="plato">1/4 DE POLLO TRASERO CON PATATAS <input type="number" id="trasera" min="0" value="0"></div>
+<div class="plato">1/2 CODILLO ASADO CON PATATAS A LO POBRE <input type="number" id="codillo" min="0" value="0"></div>
+<div class="plato">LUBINA AL HORNO CON VERDURAS <input type="number" id="lubina" min="0" value="0"></div>
+<div class="plato">CANELONES CASEROS DE CARNE <input type="number" id="canelones" min="0" value="0"></div>
+<div class="plato">CALAMARES A LA ANDALUZA CON LIMÓN <input type="number" id="calamares" min="0" value="0"></div>
+<div class="plato">BACALAO DOÑA JUANA (SUPLEMENTO 7,00 €)<input type="number" id="bacalao" min="0" value="0"></div>
+<div class="plato">PIERNECITA DE LECHAL ASADA CON PATATAS PANADERA (SUPLEMENTO 18,00 €) <input type="number" id="piernecita" min="0" value="0"></div>
+<div class="plato">GORRÍN ASADO CON PATATAS PANADERA (SUPLEMENTO 18,00 €) <input type="number" id="gorrin" min="0" value="0"></div>
+</div>
+</div>
 
-    <h3>Segundos Platos</h3>
-    <label>Pollo
-        <input type="number" id="pollo" min="0" value="0">
-    </label>
-    <label>Pescado
-        <input type="number" id="pescado" min="0" value="0">
-    </label>
+<div class="seccion">
+<h2>Postres</h2>
+<div class="grid-platos">
+<div class="plato">FLAN <input type="number" id="flan" min="0" value="0"></div>
+<div class="plato">ARROZ CON LECHE <input type="number" id="arroz_leche" min="0" value="0"></div>
+<div class="plato">NATILLAS <input type="number" id="natillas" min="0" value="0"></div>
+<div class="plato">YOGUR <input type="number" id="yogur" min="0" value="0"></div>
+<div class="plato">BROWNIE <input type="number" id="brownie" min="0" value="0"></div>
+</div>
+</div>
 
-    <h3>Postres</h3>
-    <label>Fruta
-        <input type="number" id="fruta" min="0" value="0">
-    </label>
-    <label>Helado
-        <input type="number" id="helado" min="0" value="0">
-    </label>
-
-    <button type="button" onclick="guardarPedido()">Guardar Pedido</button>
-    <button type="button" onclick="exportExcel()">Exportar Excel</button>
-    <button type="button" onclick="exportPDF()">Exportar PDF</button>
+<div class="botones">
+<button type="button" onclick="guardarPedido()">Guardar pedido</button>
+<button type="button" onclick="exportExcel()">Exportar Excel</button>
+<button type="button" onclick="exportPDF()">Exportar PDF</button>
+</div>
 </form>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-const AIRTABLE_API_KEY = "TU_API_KEY";
-const AIRTABLE_BASE_ID = "TU_BASE_ID";
-const AIRTABLE_TABLE_NAME = "Pedidos";
+// Configuración Airtable
+const AIRTABLE_API_KEY = 'patGOB8PqOYxGzCgd.bf5681a61ae323be8558e9ada8f6fdfeec51f4e973ab2e30bc9938bb5aca1f88';
+const AIRTABLE_BASE_ID = 'app6lU2xK9KPUFO0K';
+const AIRTABLE_TABLE_NAME = 'Pedidos';
 
-const categorias = {
-    "Primeros Platos": ["ensalada","sopa"],
-    "Segundos Platos": ["pollo","pescado"],
-    "Postres": ["fruta","helado"]
-};
+// Categorías de platos
+const primeros = ['salpicon','ensalada_arroz','ensalada_aragonesa','revuelto_setas','pimientos_bacalao','ensaladilla_rusa','alubias','tostada_bonito','tostada_escabechados'];
+const segundos = ['cajilla','morcillo','trasera','codillo','lubina','canelones','calamares','bacalao','piernecita','gorrin'];
+const postres = ['flan','arroz_leche','natillas','yogur','brownie'];
+const categorias = [...primeros,...segundos,...postres];
 
+// Función de normalización
 function normalizar(str) {
-    return str.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 }
 
+// Obtener datos del formulario
 function obtenerDatos() {
-    const nombre = document.getElementById("nombre").value;
-    const apellido = document.getElementById("apellido").value;
-
-    let datos = {
-        "Nombre": nombre,
-        "Apellido": apellido,
-        "Nombre_norm": normalizar(nombre),
-        "Apellido_norm": normalizar(apellido)
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const datos = {
+        Nombre: nombre,
+        Apellido: apellido
     };
-
-    Object.values(categorias).flat().forEach(id => {
-        datos[id] = parseInt(document.getElementById(id).value) || 0;
+    categorias.forEach(id => {
+        datos[id] = Number(document.getElementById(id).value);
     });
-
     return datos;
 }
 
+// Guardar pedido con control de duplicados
 async function guardarPedido() {
     const datos = obtenerDatos();
+    const nomNorm = normalizar(datos.Nombre);
+    const apeNorm = normalizar(datos.Apellido);
 
-    const query = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}?filterByFormula=AND({Nombre_norm}='${datos.Nombre_norm}',{Apellido_norm}='${datos.Apellido_norm}')`;
-    const res = await fetch(query, {
+    // Comprobar duplicados
+    const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}?filterByFormula=AND(NORMALIZAR({Nombre})='${nomNorm}',NORMALIZAR({Apellido})='${apeNorm}')`, {
         headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` }
     });
-    const json = await res.json();
+    const data = await res.json();
 
-    if(json.records.length > 0) {
-        if(confirm('El pedido ya existe. ¿Desea actualizarlo?')) {
-            const recordId = json.records[0].id;
-            await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${recordId}`, {
+    if(data.records.length > 0) {
+        if(confirm("El pedido ya existe. ¿Deseas sobrescribirlo?")) {
+            const id = data.records[0].id;
+            await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${id}`, {
                 method: 'PATCH',
                 headers: {
                     Authorization: `Bearer ${AIRTABLE_API_KEY}`,
@@ -108,9 +201,7 @@ async function guardarPedido() {
                 },
                 body: JSON.stringify({ fields: datos })
             });
-            alert('Pedido actualizado correctamente');
-        } else {
-            alert('No se ha guardado el pedido');
+            alert("Pedido actualizado");
         }
     } else {
         await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`, {
@@ -121,75 +212,63 @@ async function guardarPedido() {
             },
             body: JSON.stringify({ fields: datos })
         });
-        alert('Pedido guardado correctamente');
+        alert("Pedido guardado");
     }
 }
 
-async function exportExcel() {
-    const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`, {
-        headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` }
+// Exportar Excel
+function exportExcel() {
+    const datos = obtenerDatos();
+    const rows = [];
+    categorias.forEach(id => {
+        if(datos[id] > 0) rows.push([id.toUpperCase().replace(/_/g," "), datos[id]]);
     });
-    const json = await res.json();
-
-    let csvContent = "data:text/csv;charset=utf-8,";
-    const headers = ["Nombre","Apellido"].concat(Object.values(categorias).flat());
-    csvContent += headers.join(",") + "\r\n";
-
-    json.records.forEach(record => {
-        const row = headers.map(h => record.fields[h] || "");
-        csvContent += row.join(",") + "\r\n";
-    });
-
+    const csvContent = "data:text/csv;charset=utf-8,"
+        + [["Nombre", datos.Nombre], ["Apellido", datos.Apellido]].map(e=>e.join(",")).join("\n")
+        + "\n\n"
+        + rows.map(e=>e.join(",")).join("\n");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "Pedidos_Comida_Pregoneros_2025.csv");
+    link.setAttribute("download", `pedido_${datos.Nombre}_${datos.Apellido}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 }
 
+// Exportar PDF
 async function exportPDF() {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'pt', 'a4');
-    const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`, {
-        headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` }
-    });
-    const json = await res.json();
+    const doc = new jsPDF();
+    const datos = obtenerDatos();
 
-    const img = new Image();
-    img.src = 'logo.png'; // Asegúrate de tener tu logo en la misma carpeta
-    img.onload = () => {
-        doc.addImage(img, 'PNG', 40, 20, 100, 50);
-        doc.setFontSize(18);
-        doc.text("Comida Pregoneros 2025", 200, 50);
+    doc.setFontSize(22);
+    doc.text("Comida Pregoneros 2025", 105, 20, null, null, "center");
 
-        let y = 90;
-        Object.keys(categorias).forEach(cat => {
-            doc.setFontSize(14);
-            doc.text(cat, 40, y);
-            y += 20;
-            json.records.forEach(r => {
-                let line = `${r.fields.Nombre || ''} ${r.fields.Apellido || ''}: `;
-                categorias[cat].forEach(p => {
-                    if(r.fields[p] && r.fields[p] > 0) line += `${p} (${r.fields[p]}), `;
-                });
-                if(line.endsWith(", ")) line = line.slice(0, -2);
-                if(line.trim() !== `${r.fields.Nombre || ''} ${r.fields.Apellido || ''}:`) {
-                    doc.setFontSize(12);
-                    doc.text(line, 50, y);
-                    y += 15;
-                    if(y > 770) { doc.addPage(); y = 40; }
-                }
-            });
-            y += 15;
+    doc.setFontSize(16);
+    doc.text(`Nombre: ${datos.Nombre}`, 20, 35);
+    doc.text(`Apellido: ${datos.Apellido}`, 20, 45);
+
+    let y = 55;
+    const secciones = { "Primeros Platos": primeros, "Segundos Platos": segundos, "Postres": postres };
+    for(const [titulo, items] of Object.entries(secciones)) {
+        doc.setFontSize(14);
+        doc.setTextColor(142,68,173);
+        doc.text(titulo, 20, y);
+        y += 7;
+        doc.setTextColor(0,0,0);
+        items.forEach(id => {
+            if(datos[id]>0){
+                doc.text(`${id.toUpperCase().replace(/_/g," ")}: ${datos[id]}`, 25, y);
+                y+=7;
+            }
         });
-
-        doc.save("Pedidos_Comida_Pregoneros_2025.pdf");
+        y+=5;
     }
+
+    doc.save(`pedido_${datos.Nombre}_${datos.Apellido}.pdf`);
 }
 </script>
-
 </body>
 </html>
 
