@@ -152,36 +152,19 @@ const AIRTABLE_API_KEY = 'patGOB8PqOYxGzCgd.bf5681a61ae323be8558e9ada8f6fdfeec51
 const AIRTABLE_BASE_ID = 'app6lU2xK9KPUFO0K';
 const AIRTABLE_TABLE_NAME = 'Pedidos';
 
-async function guardarPedido() {
-    const datos = {
-        Nombre: document.getElementById('nombre').value,
-        Apellido: document.getElementById('apellido').value,
-        Salpicon: parseInt(document.getElementById('salpicon').value),
-        Ensalada_arroz: parseInt(document.getElementById('ensalada_arroz').value),
-        Ensalada_aragonesa: parseInt(document.getElementById('ensalada_aragonesa').value),
-        Revuelto_setas: parseInt(document.getElementById('revuelto_setas').value),
-        Pimientos_bacalao: parseInt(document.getElementById('pimientos_bacalao').value),
-        Ensaladilla_rusa: parseInt(document.getElementById('ensaladilla_rusa').value),
-        Alubias: parseInt(document.getElementById('alubias').value),
-        Tostada_bonito: parseInt(document.getElementById('tostada_bonito').value),
-        Tostada_escabechados: parseInt(document.getElementById('tostada_escabechados').value),
-        Cajilla: parseInt(document.getElementById('cajilla').value),
-        Morcillo: parseInt(document.getElementById('morcillo').value),
-        Trasera: parseInt(document.getElementById('trasera').value),
-        Codillo: parseInt(document.getElementById('codillo').value),
-        Lubina: parseInt(document.getElementById('lubina').value),
-        Canelones: parseInt(document.getElementById('canelones').value),
-        Calamares: parseInt(document.getElementById('calamares').value),
-        Bacalao: parseInt(document.getElementById('bacalao').value),
-        Piernecita: parseInt(document.getElementById('piernecita').value),
-        Gorrin: parseInt(document.getElementById('gorrin').value),
-        Flan: parseInt(document.getElementById('flan').value),
-        Arroz_leche: parseInt(document.getElementById('arroz_leche').value),
-        Natillas: parseInt(document.getElementById('natillas').value),
-        Yogur: parseInt(document.getElementById('yogur').value),
-        Brownie: parseInt(document.getElementById('brownie').value)
-    };
+const categorias = ['Salpicon','Ensalada_arroz','Ensalada_aragonesa','Revuelto_setas','Pimientos_bacalao','Ensaladilla_rusa','Alubias','Tostada_bonito','Tostada_escabechados','Cajilla','Morcillo','Trasera','Codillo','Lubina','Canelones','Calamares','Bacalao','Piernecita','Gorrin','Flan','Arroz_leche','Natillas','Yogur','Brownie'];
 
+function obtenerDatos() {
+    const datos = {Nombre: document.getElementById('nombre').value, Apellido: document.getElementById('apellido').value};
+    categorias.forEach(cat => {
+        const val = parseInt(document.getElementById(cat.toLowerCase()).value);
+        if(val > 0) datos[cat] = val;
+    });
+    return datos;
+}
+
+async function guardarPedido() {
+    const datos = obtenerDatos();
     try {
         const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`, {
             method: 'POST',
@@ -193,6 +176,7 @@ async function guardarPedido() {
         });
         if (response.ok) {
             alert('Pedido guardado correctamente en Airtable!');
+            document.getElementById('pedidoForm').reset();
         } else {
             const error = await response.json();
             alert('Error al guardar pedido: ' + JSON.stringify(error));
@@ -210,38 +194,32 @@ function exportPDF() {
     img.src = 'logo.png';
     img.onload = function() {
         doc.addImage(img, 'PNG', 10, 10, 50, 20);
-        generarContenidoPDF(doc);
+        doc.setFontSize(14);
+        let y = 40;
+        const datos = obtenerDatos();
+        doc.text(`Cliente: ${datos.Nombre} ${datos.Apellido}`, 10, y);
+        y += 10;
+        for(const [key, val] of Object.entries(datos)) {
+            if(key !== 'Nombre' && key !== 'Apellido') {
+                const nombreLegible = key.replace(/_/g,' ').toUpperCase();
+                doc.text(`${nombreLegible}: ${val}`, 10, y);
+                y += 7;
+            }
+        }
         doc.save('pedido.pdf');
     };
 }
 
-function generarContenidoPDF(doc) {
-    doc.setFontSize(14);
-    let y = 40;
-    const nombre = document.getElementById('nombre').value;
-    const apellido = document.getElementById('apellido').value;
-    doc.text(`Cliente: ${nombre} ${apellido}`, 10, y);
-    y += 10;
-    const categorias = ['Salpicon','Ensalada_arroz','Ensalada_aragonesa','Revuelto_setas','Pimientos_bacalao','Ensaladilla_rusa','Alubias','Tostada_bonito','Tostada_escabechados','Cajilla','Morcillo','Trasera','Codillo','Lubina','Canelones','Calamares','Bacalao','Piernecita','Gorrin','Flan','Arroz_leche','Natillas','Yogur','Brownie'];
-    categorias.forEach(cat => {
-        const val = parseInt(document.getElementById(cat.toLowerCase()).value);
-        if(val > 0){
-            doc.text(`${cat}: ${val}`, 10, y);
-            y += 7;
-        }
-    });
-}
-
 function exportExcel() {
     let csvContent = "data:text/csv;charset=utf-8,";
-    const nombre = document.getElementById('nombre').value;
-    const apellido = document.getElementById('apellido').value;
-    csvContent += `Nombre,${nombre},Apellido,${apellido}\n`;
-    const categorias = ['Salpicon','Ensalada_arroz','Ensalada_aragonesa','Revuelto_setas','Pimientos_bacalao','Ensaladilla_rusa','Alubias','Tostada_bonito','Tostada_escabechados','Cajilla','Morcillo','Trasera','Codillo','Lubina','Canelones','Calamares','Bacalao','Piernecita','Gorrin','Flan','Arroz_leche','Natillas','Yogur','Brownie'];
-    categorias.forEach(cat => {
-        const val = parseInt(document.getElementById(cat.toLowerCase()).value);
-        csvContent += `${cat},${val}\n`;
-    });
+    const datos = obtenerDatos();
+    csvContent += `Nombre,${datos.Nombre},Apellido,${datos.Apellido}\n`;
+    for(const [key, val] of Object.entries(datos)) {
+        if(key !== 'Nombre' && key !== 'Apellido') {
+            const nombreLegible = key.replace(/_/g,' ').toUpperCase();
+            csvContent += `${nombreLegible},${val}\n`;
+        }
+    }
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -253,5 +231,6 @@ function exportExcel() {
 </script>
 </body>
 </html>
+
 
 
