@@ -147,59 +147,50 @@ button:hover {
 </form>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// Configuración Airtable
 const AIRTABLE_API_KEY = 'patGOB8PqOYxGzCgd.bf5681a61ae323be8558e9ada8f6fdfeec51f4e973ab2e30bc9938bb5aca1f88';
 const AIRTABLE_BASE_ID = 'app6lU2xK9KPUFO0K';
 const AIRTABLE_TABLE_NAME = 'Pedidos';
 
-// Categorías de platos
-const primeros = ['salpicon','ensalada_arroz','ensalada_aragonesa','revuelto_setas','pimientos_bacalao','ensaladilla_rusa','alubias','tostada_bonito','tostada_escabechados'];
-const segundos = ['cajilla','morcillo','trasera','codillo','lubina','canelones','calamares','bacalao','piernecita','gorrin'];
-const postres = ['flan','arroz_leche','natillas','yogur','brownie'];
-const categorias = [...primeros,...segundos,...postres];
-
-// Función de normalización
-function normalizar(str) {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+function normalizar(texto){
+    return texto.trim().toLowerCase();
 }
 
-// Obtener datos del formulario
-function obtenerDatos() {
-    const nombre = document.getElementById('nombre').value;
-    const apellido = document.getElementById('apellido').value;
-    const datos = {
-        Nombre: nombre,
-        Apellido: apellido
-    };
-    categorias.forEach(id => {
-        datos[id] = Number(document.getElementById(id).value);
-    });
-    return datos;
-}
-
-// Guardar pedido con control de duplicados
-async function guardarPedido() {
-    const datos = obtenerDatos();
-    const nomNorm = normalizar(datos.Nombre);
-    const apeNorm = normalizar(datos.Apellido);
-
-    // Comprobar duplicados
-    const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}?filterByFormula=AND(NORMALIZAR({Nombre})='${nomNorm}',NORMALIZAR({Apellido})='${apeNorm}')`, {
+async function obtenerPedidos() {
+    const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`, {
         headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` }
     });
     const data = await res.json();
+    return data.records;
+}
 
-    if(data.records.length > 0) {
-        if(confirm("El pedido ya existe. ¿Deseas sobrescribirlo?")) {
-            const id = data.records[0].id;
-            await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${id}`, {
+async function guardarPedido() {
+    const nombre = normalizar(document.getElementById('nombre').value);
+    const apellido = normalizar(document.getElementById('apellido').value);
+
+    if(!nombre || !apellido){
+        alert("Debe ingresar nombre y apellido");
+        return;
+    }
+
+    const todos = await obtenerPedidos();
+    const existente = todos.find(r => normalizar(r.fields.Nombre) === nombre && normalizar(r.fields.Apellido) === apellido);
+
+    const pedido = {};
+    document.querySelectorAll('.plato input').forEach(inp=>{
+        pedido[inp.id] = parseInt(inp.value) || 0;
+    });
+
+    if(existente){
+        if(confirm("El pedido ya existe. ¿Desea actualizarlo?")){
+            await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${existente.id}`, {
                 method: 'PATCH',
                 headers: {
-                    Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type':'application/json',
+                    Authorization: `Bearer ${AIRTABLE_API_KEY}`
                 },
-                body: JSON.stringify({ fields: datos })
+                body: JSON.stringify({ fields: { Nombre: document.getElementById('nombre').value, Apellido: document.getElementById('apellido').value, ...pedido } })
             });
             alert("Pedido actualizado");
         }
@@ -207,66 +198,61 @@ async function guardarPedido() {
         await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`, {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-                'Content-Type': 'application/json'
+                'Content-Type':'application/json',
+                Authorization: `Bearer ${AIRTABLE_API_KEY}`
             },
-            body: JSON.stringify({ fields: datos })
+            body: JSON.stringify({ fields: { Nombre: document.getElementById('nombre').value, Apellido: document.getElementById('apellido').value, ...pedido } })
         });
         alert("Pedido guardado");
     }
 }
 
-// Exportar Excel
 function exportExcel() {
-    const datos = obtenerDatos();
-    const rows = [];
-    categorias.forEach(id => {
-        if(datos[id] > 0) rows.push([id.toUpperCase().replace(/_/g," "), datos[id]]);
-    });
-    const csvContent = "data:text/csv;charset=utf-8,"
-        + [["Nombre", datos.Nombre], ["Apellido", datos.Apellido]].map(e=>e.join(",")).join("\n")
-        + "\n\n"
-        + rows.map(e=>e.join(",")).join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `pedido_${datos.Nombre}_${datos.Apellido}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const wb = XLSX.utils.book_new();
+    const data = [];
+    const headers = ["Nombre","Apellido",...Array.from(document.querySelectorAll('.plato')).map(p=>p.textContent.trim())];
+    data.push(headers);
+    data.push([document.getElementById('nombre').value, document.getElementById('apellido').value,
+        ...Array.from(document.querySelectorAll('.plato input')).map(inp=>inp.value)
+    ]);
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb, ws, "Pedido");
+    XLSX.writeFile(wb, "pedido.xlsx");
 }
 
-// Exportar PDF
 async function exportPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    const datos = obtenerDatos();
-
-    doc.setFontSize(22);
+    doc.setFontSize(18);
+    doc.setTextColor('#6a0dad');
     doc.text("Comida Pregoneros 2025", 105, 20, null, null, "center");
-
-    doc.setFontSize(16);
-    doc.text(`Nombre: ${datos.Nombre}`, 20, 35);
-    doc.text(`Apellido: ${datos.Apellido}`, 20, 45);
-
-    let y = 55;
-    const secciones = { "Primeros Platos": primeros, "Segundos Platos": segundos, "Postres": postres };
-    for(const [titulo, items] of Object.entries(secciones)) {
-        doc.setFontSize(14);
-        doc.setTextColor(142,68,173);
-        doc.text(titulo, 20, y);
-        y += 7;
-        doc.setTextColor(0,0,0);
-        items.forEach(id => {
-            if(datos[id]>0){
-                doc.text(`${id.toUpperCase().replace(/_/g," ")}: ${datos[id]}`, 25, y);
-                y+=7;
-            }
+    const img = new Image();
+    img.src = "logo.png";
+    img.onload = ()=>{
+        doc.addImage(img, 'PNG', 85, 25, 40, 20);
+        doc.setFontSize(12);
+        let y = 55;
+        ['Primeros Platos','Segundos Platos','Postres'].forEach(seccion=>{
+            doc.setFontSize(14);
+            doc.setTextColor('#8e44ad');
+            doc.text(seccion, 20, y);
+            y += 7;
+            doc.setFontSize(12);
+            document.querySelectorAll(`.seccion h2`).forEach((h, i)=>{
+                if(h.textContent === seccion){
+                    document.querySelectorAll('.grid-platos')[i].querySelectorAll('.plato').forEach(pl=>{
+                        const cantidad = pl.querySelector('input').value;
+                        if(cantidad>0){
+                            doc.text(`${pl.textContent.split(' ')[0]}: ${cantidad}`, 25, y);
+                            y += 7;
+                        }
+                    });
+                }
+            });
+            y += 5;
         });
-        y+=5;
+        doc.save("pedido.pdf");
     }
-
-    doc.save(`pedido_${datos.Nombre}_${datos.Apellido}.pdf`);
 }
 </script>
 </body>
