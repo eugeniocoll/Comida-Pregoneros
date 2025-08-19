@@ -217,6 +217,11 @@ function normalizar(texto){
   return texto.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
 
+// Escapa comillas simples para fórmula de Airtable
+function escFormula(v){
+  return String(v ?? '').replace(/'/g, "\\'");
+}
+
 function obtenerDatos(){
   const datos = {
     Nombre: document.getElementById('nombre').value,
@@ -241,13 +246,20 @@ async function guardarPedido() {
   }
 
   try {
-    // 1) Buscar duplicado por campos normalizados
-    const filtro = `AND({Nombre_norm}='${datos.Nombre_norm}',{Apellido_norm}='${datos.Apellido_norm}')`;
-    const busca = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}?filterByFormula=${encodeURIComponent(filtro)}`,
-      { headers: { 'Authorization': `Bearer ${AIRTABLE_API_KEY}` } }
-    );
+    // 1) Buscar duplicado por campos normalizados (escapando valores)
+    const filtro = `AND({Nombre_norm}='${escFormula(datos.Nombre_norm)}',{Apellido_norm}='${escFormula(datos.Apellido_norm)}')`;
+    const urlBuscar = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}?maxRecords=1&filterByFormula=${encodeURIComponent(filtro)}`;
+
+    const busca = await fetch(urlBuscar, {
+      headers: { 'Authorization': `Bearer ${AIRTABLE_API_KEY}` }
+    });
     const dataBusca = await busca.json();
+    console.log('🔎 URL filtro:', urlBuscar);
+    console.log('📄 Respuesta búsqueda:', dataBusca);
+
+    if (!busca.ok) {
+      throw new Error(dataBusca.error?.message || 'Error en búsqueda');
+    }
 
     if (dataBusca.records && dataBusca.records.length > 0) {
       // Ya existe: no duplicamos. Ofrecemos actualizar.
@@ -255,7 +267,7 @@ async function guardarPedido() {
       if (!deseaActualizar) return;
 
       const recordId = dataBusca.records[0].id;
-      const upd = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${recordId}`, {
+      const upd = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}/${recordId}`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
@@ -264,26 +276,28 @@ async function guardarPedido() {
         body: JSON.stringify({ fields: datos })
       });
       const updJson = await upd.json();
+      console.log('✏️ Respuesta actualización:', updJson);
       if (!upd.ok) throw new Error(updJson.error?.message || 'Error al actualizar');
       alert('✅ Pedido actualizado correctamente');
       return;
     }
 
     // 2) Si no existe, creamos
-    const crea = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`, {
+    const crea = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ fields: datos })
+      body: JSON.stringify({ fields: datos }) // ← igual que tu versión que funcionaba
     });
     const creaJson = await crea.json();
+    console.log('➕ Respuesta creación:', creaJson);
     if (!crea.ok) throw new Error(creaJson.error?.message || 'Error al guardar');
 
     alert('✅ Pedido guardado correctamente');
   } catch (e) {
-    console.error('Error en Airtable:', e);
+    console.error('❌ Error en Airtable:', e);
     alert('❌ Error en Airtable: ' + e.message);
   }
 }
@@ -339,8 +353,8 @@ function exportPDF(){
     // Datos básicos
     doc.setFontSize(12);
     doc.setTextColor(0,0,0);
-    doc.text(`Nombre: ${datos.Nombre || ''}`, 15, y); y += 6;
-    doc.text(`Apellido: ${datos.Apellido || ''}`, 15, y); y += 10;
+    doc.text(`Nombre: ${datos.Nombre || ''}`, 15, y); y+=6;
+    doc.text(`Apellido: ${datos.Apellido || ''}`, 15, y); y+=10;
 
     // Secciones
     let totalGeneral = 0;
