@@ -84,6 +84,17 @@ button {
 button:hover {
     background: #732d91;
 }
+#log {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 15px;
+    border-radius: 10px;
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    font-family: monospace;
+    white-space: pre-wrap;
+}
 </style>
 </head>
 <body>
@@ -141,28 +152,47 @@ button:hover {
 
 <div class="botones">
 <button type="button" onclick="guardarPedido()">Guardar pedido</button>
-<button type="button" onclick="exportExcel()">Exportar Excel</button>
-<button type="button" onclick="exportPDF()">Exportar PDF</button>
 </div>
 </form>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- Sección para mostrar errores y éxitos -->
+<div id="log"><b>Registro de Errores y Éxitos:</b>\n</div>
+
 <script>
-const AIRTABLE_API_KEY = 'patGOB8PqOYxGzCgd.bf5681a61ae323be8558e9ada8f6fdfeec51f4e973ab2e30bc9938bb5aca1f88';
-const AIRTABLE_BASE_ID = 'app6lU2xK9KPUFO0K';
+const AIRTABLE_API_KEY = 'TU_API_KEY';
+const AIRTABLE_BASE_ID = 'TU_BASE_ID';
 const AIRTABLE_TABLE_NAME = 'Pedidos';
 
+function logMsg(msg, ok=false){
+    const logDiv = document.getElementById("log");
+    logDiv.textContent += "\n" + (ok ? "✅ " : "❌ ") + msg;
+    console.log(msg);
+}
+
 function normalizar(texto){
-    return texto.trim().toLowerCase();
+    return (texto || "").trim().toLowerCase();
+}
+
+async function fetchAirtable(url, options) {
+    try {
+        const res = await fetch(url, options);
+        const data = await res.json();
+        console.log("📡 Respuesta Airtable:", data);
+
+        if (!res.ok) {
+            throw new Error(data.error?.message || "Error desconocido en Airtable");
+        }
+        return data;
+    } catch (err) {
+        logMsg("Error en Airtable: " + err.message, false);
+        throw err;
+    }
 }
 
 async function obtenerPedidos() {
-    const res = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`, {
+    return fetchAirtable(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`, {
         headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}` }
-    });
-    const data = await res.json();
-    return data.records;
+    }).then(data => data.records);
 }
 
 async function guardarPedido() {
@@ -171,10 +201,17 @@ async function guardarPedido() {
 
     if(!nombre || !apellido){
         alert("Debe ingresar nombre y apellido");
+        logMsg("Falta nombre o apellido", false);
         return;
     }
 
-    const todos = await obtenerPedidos();
+    let todos = [];
+    try {
+        todos = await obtenerPedidos();
+    } catch (e) {
+        logMsg("No se pudieron obtener pedidos existentes", false);
+    }
+
     const existente = todos.find(r => normalizar(r.fields.Nombre) === nombre && normalizar(r.fields.Apellido) === apellido);
 
     const pedido = {};
@@ -184,7 +221,7 @@ async function guardarPedido() {
 
     if(existente){
         if(confirm("El pedido ya existe. ¿Desea actualizarlo?")){
-            await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}/${existente.id}`, {
+            await fetchAirtable(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}/${existente.id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type':'application/json',
@@ -192,10 +229,11 @@ async function guardarPedido() {
                 },
                 body: JSON.stringify({ fields: { Nombre: document.getElementById('nombre').value, Apellido: document.getElementById('apellido').value, ...pedido } })
             });
-            alert("Pedido actualizado");
+            alert("✅ Pedido actualizado correctamente");
+            logMsg("Pedido actualizado correctamente", true);
         }
     } else {
-        await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`, {
+        await fetchAirtable(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`, {
             method: 'POST',
             headers: {
                 'Content-Type':'application/json',
@@ -203,62 +241,10 @@ async function guardarPedido() {
             },
             body: JSON.stringify({ fields: { Nombre: document.getElementById('nombre').value, Apellido: document.getElementById('apellido').value, ...pedido } })
         });
-        alert("Pedido guardado");
-    }
-}
-
-function exportExcel() {
-    const wb = XLSX.utils.book_new();
-    const data = [];
-    const headers = ["Nombre","Apellido",...Array.from(document.querySelectorAll('.plato')).map(p=>p.textContent.trim())];
-    data.push(headers);
-    data.push([document.getElementById('nombre').value, document.getElementById('apellido').value,
-        ...Array.from(document.querySelectorAll('.plato input')).map(inp=>inp.value)
-    ]);
-    const ws = XLSX.utils.aoa_to_sheet(data);
-    XLSX.utils.book_append_sheet(wb, ws, "Pedido");
-    XLSX.writeFile(wb, "pedido.xlsx");
-}
-
-async function exportPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.setFontSize(18);
-    doc.setTextColor('#6a0dad');
-    doc.text("Comida Pregoneros 2025", 105, 20, null, null, "center");
-    const img = new Image();
-    img.src = "logo.png";
-    img.onload = ()=>{
-        doc.addImage(img, 'PNG', 85, 25, 40, 20);
-        doc.setFontSize(12);
-        let y = 55;
-        ['Primeros Platos','Segundos Platos','Postres'].forEach(seccion=>{
-            doc.setFontSize(14);
-            doc.setTextColor('#8e44ad');
-            doc.text(seccion, 20, y);
-            y += 7;
-            doc.setFontSize(12);
-            document.querySelectorAll(`.seccion h2`).forEach((h, i)=>{
-                if(h.textContent === seccion){
-                    document.querySelectorAll('.grid-platos')[i].querySelectorAll('.plato').forEach(pl=>{
-                        const cantidad = pl.querySelector('input').value;
-                        if(cantidad>0){
-                            doc.text(`${pl.textContent.split(' ')[0]}: ${cantidad}`, 25, y);
-                            y += 7;
-                        }
-                    });
-                }
-            });
-            y += 5;
-        });
-        doc.save("pedido.pdf");
+        alert("✅ Pedido guardado correctamente");
+        logMsg("Pedido guardado correctamente", true);
     }
 }
 </script>
 </body>
-</html>
-
-
-
-
-
+</html> 
